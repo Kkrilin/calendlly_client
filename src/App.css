@@ -1,42 +1,310 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
+a {
+  color: #000;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+html {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border-bottom: 2.5px solid #f7f9fc;
+}
 .logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  width: 60px;
+  height: 60px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+li {
+  color: #414c5a;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+nav h3 {
+  font-size: 2rem;
+  font-weight: 400;
+  /* letter-spacing: 0.6px; */
+}
+nav > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 78px;
+  padding: 20px;
+  width: 100%;
+  max-width: 1280px;
 }
 
-.card {
-  padding: 2em;
+nav > div > a {
+  cursor: pointer;
+  color: rgb(0, 107, 255);
+  font-weight: 700;
+}
+ul {
+  list-style: none outside none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.read-the-docs {
-  color: #888;
+.main_navlink li {
+  margin: 0 18px;
+}
+
+.login_navlink li {
+  margin: 0 12px;
+  cursor: pointer;
+}
+
+.login_navlink button,
+.google_button {
+  background-color: #006bff;
+  padding: 1rem;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 10px;
+}
+
+.google_button {
+  padding: 6px 16px 6px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 3rem;
+}
+
+.login_navlink button:hover,
+.google_button:hover {
+  background-color: #0056cf;
+  cursor: pointer;
+}
+
+button {
+  border: none;
+}
+
+.home_page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 40px;
+}
+
+.home_page > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  padding: 72px 0;
+  gap: 32px;
+}
+
+.right_homePage {
+  border: 1px solid rgb(224, 224, 224);
+  box-shadow: rgba(71, 103, 136, 0.04) 0px 4px 5px 0px,
+    rgba(71, 103, 136, 0.03) 0px 8px 15px 0px,
+    rgba(71, 103, 136, 0.08) 0px 30px 50px 0px;
+  border-radius: 16px;
+  width: 100%;
+}
+
+.footer_left {
+  border: 1px solid rgb(224, 224, 224);
+  box-shadow: rgba(71, 103, 136, 0.04) 0px 4px 5px 0px,
+    rgba(71, 103, 136, 0.03) 0px 8px 15px 0px,
+    rgba(71, 103, 136, 0.08) 0px 30px 50px 0px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  gap: 10px;
+  width: 100%;
+  max-width: 670px;
+  padding: 2.5rem;
+}
+
+.booking_image {
+  width: 100%;
+  height: auto;
+}
+.before_after {
+  color: rgb(79, 79, 97);
+  position: relative;
+  padding: 0 16px;
+}
+
+.before_after::before {
+  content: "";
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  height: 1px;
+  width: calc(100% + 300px);
+  background: rgb(229, 229, 229);
+}
+
+.before_after::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  height: 1px;
+  width: calc(100% + 300px);
+  background: rgb(229, 229, 229);
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  border-top: 1px solid rgb(238, 238, 246);
+}
+
+.footer_middle {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgb(224, 224, 234);
+}
+
+.footer_middle h5 {
+  color: #1b4263;
+  font-size: 1rem;
+  font-weight: 600;
+  /* letter-spacing: 1px; */
+}
+
+.footer_middle > div ul li {
+  color: rgb(64, 81, 95);
+  font-weight: 400;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+  /* border-bottom: 1px solid transparent; */
+}
+
+.footer_middle > div ul li:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.footer_middle div {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  gap: 12px;
+}
+.footer_middle ul {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+}
+
+.footer_bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 0 6rem 0;
+}
+
+.footer_bottom h4 {
+  color: #1b4263;
+  font-weight: 500;
+}
+
+.footer_bottom > ul li {
+  color: rgb(64, 81, 95);
+  font-weight: 300;
+  font-size: 0.75rem;
+}
+
+.footer_bottom ul {
+  gap: 20px;
+}
+
+.footer_bottom > h3 {
+  color: rgb(64, 81, 95);
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
+.signup_page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 0;
+  width: 100%;
+}
+
+.signup_page > div {
+  border: 1px solid rgb(224, 224, 224);
+  box-shadow: rgba(71, 103, 136, 0.04) 0px 4px 5px 0px,
+    rgba(71, 103, 136, 0.03) 0px 8px 15px 0px,
+    rgba(71, 103, 136, 0.08) 0px 30px 50px 0px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 640px;
+}
+
+.signup_page > div > div {
+  padding: 2rem 3rem;
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.signup_form,
+.login_form {
+  display: flex;
+  flex-direction: column;
+  /* gap: 1rem; */
+}
+
+.signup_form div,
+.login_form div {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  gap: 10px;
+}
+
+.signup_form div > input,
+.login_form div > input {
+  border: 1px solid rgb(126, 126, 137);
+  width: 100%;
+  height: 3rem;
+  outline: none;
+  border-radius: 6px;
+  padding-left: 1rem;
+  font-size: 1.4rem;
+}
+
+.signup_form div > input::placeholder,
+.login_form div > input::placeholder {
+  padding-left: 1rem;
+  font-size: 1rem;
+}
+
+.error {
+  color: red;
+  font-size: 11px;
 }
