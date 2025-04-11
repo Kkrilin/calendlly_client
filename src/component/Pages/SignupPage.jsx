@@ -1,13 +1,24 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { config } from "../../config";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+const { serverBaseUrl } = config;
 
 const SignupPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const payload = {
+    name,
+    email,
+    password,
+  };
+  const signUpUrl = `${serverBaseUrl}/auth/signup`;
 
-  const handleSignUpSubmit = (e) => {
+  const handleSignUpSubmit = async (e) => {
     e.preventDefault();
     if (!name || !email || !password) {
       setError("error in the signup");
@@ -17,6 +28,14 @@ const SignupPage = () => {
     if (password.length < 6) {
       setError("error in the signup");
       return;
+    }
+
+    try {
+      const signUpRes = await axios.post(signUpUrl, payload);
+      navigate("/app/event_type/user/me", { state: { data: signUpRes.data } });
+    } catch (error) {
+      setError(error.message);
+      console.log(error);
     }
   };
 

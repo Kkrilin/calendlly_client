@@ -1,12 +1,22 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useGoogleLogin } from "@react-oauth/google";
+import { config } from "../../config";
+import axios from "axios";
 
+const serverBaseUrl = config.serverBaseUrl;
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const payload = {
+    email,
+    password,
+  };
 
-  const handleSignUpSubmit = (e) => {
+  const loginUrl = `${serverBaseUrl}/auth/login`;
+  const handleSignUpSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
       setError("error in the signup");
@@ -17,7 +27,53 @@ const LoginPage = () => {
       setError("error in the signup");
       return;
     }
+
+    try {
+      const signUpRes = await axios.post(loginUrl, payload);
+      navigate("/app/event_type/user/me", { state: { data: signUpRes.data } });
+    } catch (error) {
+      setError(error.message);
+      console.log(error);
+    }
   };
+
+  const navigate = useNavigate();
+  const handleGoogleAuth = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      const header = {
+        headers: {
+          Authorization: `Bearer ${tokenResponse.access_token}`,
+        },
+      };
+      try {
+        const res = await axios.get(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          header
+        );
+
+        const payload = {
+          email: res.data.email,
+          email_verified: res.data.email_verified,
+          given_name: res.data.given_name,
+          name: res.data.name,
+          pictureUrl: res.data.picture,
+          googleId: res.data.sub,
+        };
+        const usersignUpResponse = await axios.post(
+          `${serverBaseUrl}/auth/google`,
+          payload
+        );
+        localStorage.setItem("token", usersignUpResponse.data.token);
+        navigate("/app/event_type/user/me", {
+          state: { data: usersignUpResponse.data },
+        });
+      } catch (error) {
+        setError(error.message);
+      }
+    },
+    onError: (error) => setError(error.message),
+    onNonOAuthError: (error) => setError(error.message),
+  });
 
   return (
     <section className="signup_page">
@@ -121,7 +177,11 @@ const LoginPage = () => {
               <p className="before_after">OR</p>
             </div>
 
-            <button className="google_button" style={{ margin: "20px auto" }}>
+            <button
+              onClick={handleGoogleAuth}
+              className="google_button"
+              style={{ margin: "20px auto" }}
+            >
               <span>
                 <img src="https://calendly.com/media/googleLogo.svg" alt="" />
               </span>
@@ -140,7 +200,7 @@ const LoginPage = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                gap:"10px"
+                gap: "10px",
               }}
             >
               <span>Don't have an account?</span>
