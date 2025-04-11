@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import { config } from "../../config";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const serverBaseUrl = config.serverBaseUrl;
 const LoginPage = () => {
@@ -16,7 +17,7 @@ const LoginPage = () => {
   };
 
   const loginUrl = `${serverBaseUrl}/auth/login`;
-  const handleSignUpSubmit = async (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) {
       setError("error in the signup");
@@ -29,11 +30,13 @@ const LoginPage = () => {
     }
 
     try {
-      const signUpRes = await axios.post(loginUrl, payload);
-      navigate("/app/event_type/user/me", { state: { data: signUpRes.data } });
+      const loginRes = await axios.post(loginUrl, payload);
+      localStorage.setItem("token", loginRes.data.token);
+      navigate("/user/event_type", { state: { data: loginRes.data } });
     } catch (error) {
       setError(error.message);
       console.log(error);
+      toast.error(error.message);
     }
   };
 
@@ -59,13 +62,13 @@ const LoginPage = () => {
           pictureUrl: res.data.picture,
           googleId: res.data.sub,
         };
-        const usersignUpResponse = await axios.post(
+        const userLoginResponse = await axios.post(
           `${serverBaseUrl}/auth/google`,
           payload
         );
-        localStorage.setItem("token", usersignUpResponse.data.token);
-        navigate("/app/event_type/user/me", {
-          state: { data: usersignUpResponse.data },
+        localStorage.setItem("token", userLoginResponse.data.token);
+        navigate("/user/event_type", {
+          state: { data: userLoginResponse.data },
         });
       } catch (error) {
         setError(error.message);
@@ -89,7 +92,7 @@ const LoginPage = () => {
           >
             Login to your account
           </h2>
-          <form onSubmit={handleSignUpSubmit} className="login_form">
+          <form onSubmit={handleLoginSubmit} className="login_form">
             <div>
               <label
                 htmlFor="email"

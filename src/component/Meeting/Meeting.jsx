@@ -1,9 +1,14 @@
 import { Avatar, Button } from "@mui/material";
 
-const EventType = () => {
+import { useLocation } from "react-router-dom";
+const Meeting = () => {
+  const location = useLocation();
+  const { state } = location;
+  const { data } = state;
+  console.log("data", data);
   return (
     <>
-      <h1>Event Type</h1>
+      <h1>Meeting</h1>
       <div
         style={{
           display: "flex",
@@ -43,4 +48,4 @@ const EventType = () => {
   );
 };
 
-export default EventType;
+export default Meeting;

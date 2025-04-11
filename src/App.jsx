@@ -7,24 +7,25 @@ import Header from "./component/Header/Header";
 import Footer from "./component/Footer/Footer";
 import HomePage from "./component/Pages/HomePage";
 import LandingLaylout from "./component/Layout/LandingLayout";
+import ProfileLayout from "./component/Layout/ProfileLayout";
+import EventType from "./component/EventType/EventType";
+import Availability from "./component/Availability/Availability";
+import { Toaster } from "react-hot-toast";
 function App() {
   return (
     <BrowserRouter>
       {/* <Header></Header> */}
+      <Toaster position="top-center" reverseOrder={false} />
       <Routes>
         <Route path="/" element={<LandingLaylout />}>
           <Route index element={<LandingPage />} />
           <Route path="signup" element={<SignupPage />} />
           <Route path="login" element={<LoginPage />} />
         </Route>
-        <Route path="/app" element={<HomePage />}>
-          <Route
-            path="event_type/user/me"
-            element={<h1>welcome to your profile</h1>}
-          ></Route>
-          <Route path="meeting" element={<h1>meeting</h1>}></Route>
-          <Route path="edit" element={<h1>editttttt</h1>} />
-          <Route path="shecedule" element={<h1>shecedule</h1>} />
+        <Route path="/user" element={<ProfileLayout />}>
+          <Route index path="event_type" element={<EventType />} />
+          <Route path="meeting" element={<h1>editttttt</h1>} />
+          <Route path="availability" element={<Availability />} />
         </Route>
       </Routes>
       {/* <Footer></Footer> */}

@@ -34,7 +34,7 @@ const LandingPage = () => {
           payload
         );
         localStorage.setItem("token", usersignUpResponse.data.token);
-        navigate("/app/event_type/user/me", {
+        navigate("/user/event_type", {
           state: { data: usersignUpResponse.data },
         });
       } catch (error) {

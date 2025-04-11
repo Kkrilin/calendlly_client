@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { config } from "../../config";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
+import { toast } from "react-hot-toast";
 const { serverBaseUrl } = config;
 
 const SignupPage = () => {
@@ -32,10 +34,11 @@ const SignupPage = () => {
 
     try {
       const signUpRes = await axios.post(signUpUrl, payload);
-      navigate("/app/event_type/user/me", { state: { data: signUpRes.data } });
+      navigate("user/event_type", { state: { data: signUpRes.data } });
     } catch (error) {
-      setError(error.message);
-      console.log(error);
+      setError(error.response.data.message);
+      toast.error(error.response.data.message);
+      console.log(error.response.data.message);
     }
   };
 

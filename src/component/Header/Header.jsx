@@ -5,7 +5,7 @@ const Header = () => {
       {/* <div></div> */}
       <nav>
         <div>
-          <Link to="/">
+          <Link className="header_logo" to="/">
             <img
               className="logo"
               decoding="async"
@@ -27,7 +27,7 @@ const Header = () => {
               <li>Log In</li>
             </Link>
             <Link to="/signup">
-              <li >
+              <li>
                 <button>Get started</button>
               </li>
             </Link>
