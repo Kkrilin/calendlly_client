@@ -444,3 +444,53 @@ select {
   border: 1px solid rgb(126, 126, 137);
   padding-left: 0.6rem;
 }
+
+.one_event {
+  display: flex;
+  /* justify-content: ; */
+  /* align-items: center; */
+  width: 70vw;
+  height: 75vh;
+  padding: 4rem;
+  gap: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  border-radius: 10px;
+}
+
+.book_time {
+  height: 3.5rem;
+  width: 14rem;
+  vertical-align: middle;
+  text-align: center;
+  background-color: white;
+  border: 2px solid #116ee1;
+  border-radius: 4px;
+  color: #0066e6;
+  cursor: pointer;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.book_time:hover {
+  border: 2px solid #0066e6;
+  background-color: #a2ccff;
+}
+
+.next {
+  height: 3.5rem;
+  width: 6.5rem;
+  vertical-align: middle;
+  text-align: center;
+  background-color: #0066e6;
+  border: 2px solid #116ee1;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

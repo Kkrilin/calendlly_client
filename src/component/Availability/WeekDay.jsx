@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
 import StartAndEndTime from "./StartAndEndTime";
+import { dayOfWeeks } from "../../utils";
 
-const WeekDay = ({ week }) => {
+const WeekDay = ({ avail }) => {
   const [startTime, setStartTime] = useState("09:00 am");
   const [endTime, setEndTime] = useState("05:00 pm");
   const [checked, setChecked] = useState(false);
-  const handleCheckBoxSelect = (e) => {
-    console.log(e.target.checked, "weeekday");
-    setChecked((preState) => !preState);
-  };
 
-  useEffect(() =>{
+  useEffect(() => {
+    setChecked(!!avail.active);
+  }, []);
 
-  }, [])
   return (
     <div className="week_days">
       <div style={{ marginRight: "40px" }}>
@@ -23,19 +21,19 @@ const WeekDay = ({ week }) => {
             gap: "10px",
             alignItems: "center",
           }}
-          htmlFor={week}
+          htmlFor={avail.id}
         >
           <input
-            onChange={handleCheckBoxSelect}
-            id={week}
+            onChange={() => setChecked((preState) => !preState)}
+            id={avail.id}
             type="checkbox"
             style={{
               width: "25px",
               height: "25px",
             }}
-            // value={week}
+            checked={checked}
           />
-          {week.toUpperCase()}
+          {dayOfWeeks[avail.day_of_week].toUpperCase()}
         </label>
       </div>
       {checked && (
@@ -46,7 +44,11 @@ const WeekDay = ({ week }) => {
           setEndTime={setEndTime}
         />
       )}
-      {!checked && <h5>Unavailable</h5>}
+      {!checked && (
+        <h4 style={{ color: "rgb(163, 161, 161)", fontWeight: "400" }}>
+          Unavailable
+        </h4>
+      )}
     </div>
   );
 };

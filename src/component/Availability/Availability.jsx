@@ -1,14 +1,23 @@
 import StartAndEndTime from "./StartAndEndTime";
-// import { weekDays } from "../../utils";
-import { useState } from "react";
+import { dayOfWeeks } from "../../utils";
+import { useEffect, useState } from "react";
 import WeekDay from "./WeekDay";
+import { availabilityBaseUrl, header } from "../../api";
+import axios from "axios";
 
 const Availability = () => {
-  const [weekDays, setWeekDays] = useState([]);
-  const payload = {};
+  const [availabilities, setAvailabilities] = useState([]);
 
-  useState(() => {
-    
+  const token = localStorage.getItem("token");
+  header.headers.Authorization = `Bearer ${token}`;
+  useEffect(() => {
+    axios
+      .get(availabilityBaseUrl, header)
+      .then((res) => {
+        console.log("res.data.availability", res.data.availability);
+        setAvailabilities(res.data.availability);
+      })
+      .catch((error) => console.log(error));
   }, []);
 
   return (
@@ -30,8 +39,8 @@ const Availability = () => {
         <div className="availability_container">
           <h3>Weekly hours</h3>
           <div className="weekly_hour_container">
-            {weekDays.map((week) => (
-              <WeekDay key={week} week={week} />
+            {availabilities.map((avail) => (
+              <WeekDay key={avail.id} avail={avail} />
             ))}
           </div>
         </div>

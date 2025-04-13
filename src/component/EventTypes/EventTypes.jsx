@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { config } from "../../config.js";
 import { useDispatch } from "react-redux";
 import { setEventTypeData } from "../../redux/eventTypeSlice.js";
+import { Link } from "react-router-dom";
 
 const EventTypes = () => {
   const [loading, setLoading] = useState(true);
@@ -33,7 +34,6 @@ const EventTypes = () => {
       });
   }, []);
 
-  
   return (
     <>
       <h1>Event Type</h1>
@@ -58,10 +58,11 @@ const EventTypes = () => {
           </Avatar>
           <div>
             <h3>{data.name}</h3>
-            <h3>
-              booking link for all event
-              {`${config.clientBaseUrl}/book/${data.id}`}
-            </h3>
+            <h3>booking link for all event</h3>
+            <Link
+              to={`${config.clientBaseUrl}/book/event/${data.id}`}
+              target="_blank"
+            >{`${config.clientBaseUrl}/book/event/${data.id}`}</Link>
           </div>
         </div>
         <CreateEventPopOver>

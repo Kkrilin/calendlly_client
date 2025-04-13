@@ -8,4 +8,5 @@ export const header = {
 };
 
 export const eventBaseUrl = `${serverBaseUrl}/api/event-types`;
-
+export const availabilityBaseUrl = `${serverBaseUrl}/api/availabilities`;
+export const eventLookUpUrl = `${serverBaseUrl}/book/look-up`
