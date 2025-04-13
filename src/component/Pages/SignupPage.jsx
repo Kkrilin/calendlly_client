@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { config } from "../../config";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { setProfileData } from "../../redux/profileSlice";
+import { useDispatch } from "react-redux";
 
 import { toast } from "react-hot-toast";
 const { serverBaseUrl } = config;
@@ -13,6 +15,9 @@ const SignupPage = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+
   const payload = {
     name,
     email,
@@ -34,11 +39,13 @@ const SignupPage = () => {
 
     try {
       const signUpRes = await axios.post(signUpUrl, payload);
-      navigate("user/event_type", { state: { data: signUpRes.data } });
+      localStorage.setItem("token", signUpRes.data.token);
+      dispatch(setProfileData({ data: signUpRes.data.userData }));
+      navigate("/user/event_type");
     } catch (error) {
-      setError(error.response.data.message);
-      toast.error(error.response.data.message);
-      console.log(error.response.data.message);
+      setError(error.response?.data?.message);
+      toast.error(error.response?.data?.message);
+      console.log(error.response?.data?.message);
     }
   };
 
@@ -153,7 +160,13 @@ const SignupPage = () => {
               <span>Sign up</span>
             </button>
           </form>
-          <div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
             <div
               style={{
                 width: "100%",
@@ -170,7 +183,7 @@ const SignupPage = () => {
                 color: "rgb(83, 103, 120)",
                 fontWeight: "300",
                 fontSize: "1rem",
-                margin: "24px 0",
+                margin: "12px 0",
               }}
             >
               Easily connect your calender by signing up with your Google{" "}
@@ -189,7 +202,12 @@ const SignupPage = () => {
                 Sign up with Google
               </span>
             </button>
-            <Link to="/login" style={{ color: "blue" }}>
+            <Link
+              to="/login"
+              style={{
+                color: "blue",
+              }}
+            >
               Log in
             </Link>
           </div>

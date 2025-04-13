@@ -3,14 +3,9 @@ import { generateTimeOptions, toSeconds } from "../../utils";
 
 const timeOptions = generateTimeOptions(15, 12);
 import HoursDropDown from "../Utils/HoursDropDown";
-const StartAndEndTime = ({ payload }) => {
-  const [startTime, setStartTime] = useState("09:00 am");
-  const [endTime, setEndTime] = useState("05:00 pm");
+const StartAndEndTime = ({ setStartTime, setEndTime, startTime, endTime }) => {
   const [error, setError] = useState("");
 
-  console.log("startTime", startTime);
-  console.log("endTime", endTime);
-  console.log(startTime > endTime);
   useEffect(() => {
     if (toSeconds(startTime) > toSeconds(endTime)) {
       setError("startTime is large");

@@ -5,7 +5,6 @@ const Meeting = () => {
   const location = useLocation();
   const { state } = location;
   const { data } = state;
-  console.log("data", data);
   return (
     <>
       <h1>Meeting</h1>

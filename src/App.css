@@ -4,9 +4,6 @@
   box-sizing: border-box;
 }
 
-body {
-  overflow: hidden;
-}
 .header_logo {
   display: flex !important  ;
   justify-content: center !important;
@@ -394,4 +391,56 @@ select {
 }
 
 .select_option:active {
+}
+
+.event_card_container {
+  /* border: 1px solid rgb(224, 224, 224); */
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  border-radius: 10px;
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+  width: 23.8rem;
+}
+
+.event_card_container:hover {
+  transform: translateY(-2%);
+}
+
+.booking_page {
+  color: rgb(82, 82, 230);
+  font-weight: 400;
+  width: max-contentff;
+}
+
+.booking_page:hover {
+  text-decoration: underline;
+  transform: translateY(-2%);
+}
+
+.setting_card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.setting_card:hover {
+  background-color: rgb(230, 239, 248);
+}
+
+.create_event_container {
+  width: 30vw;
+  border-radius: 10px;
+}
+
+#event_name {
+  width: 16rem;
+  height: 2.5rem;
+  outline: none;
+  border-radius: 6px;
+  border: 1px solid rgb(126, 126, 137);
+  padding-left: 0.6rem;
 }

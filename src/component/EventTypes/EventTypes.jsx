@@ -1,0 +1,96 @@
+import { Avatar, Button } from "@mui/material";
+import CreateEventPopOver from "../Utils/PopOver/CreateEventPopOver.jsx";
+import { eventBaseUrl } from "../../api.js";
+import { header } from "../../api.js";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Loader from "../Loader/CircularLoader.jsx";
+import EventTypeCard from "./EventTypeCard.jsx";
+import { useSelector } from "react-redux";
+import { config } from "../../config.js";
+import { useDispatch } from "react-redux";
+import { setEventTypeData } from "../../redux/eventTypeSlice.js";
+
+const EventTypes = () => {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const { data } = useSelector((state) => state.profile);
+  const { events } = useSelector((state) => state.eventType);
+  const dispatch = useDispatch();
+  const token = localStorage.getItem("token");
+  header.headers.Authorization = `Bearer ${token}`;
+  console.log("header------------------", header);
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(eventBaseUrl, header)
+      .then((res) => {
+        dispatch(setEventTypeData({ data: res.data.eventTypes }));
+      })
+      .catch((error) => console.log(error))
+      .finally(() => {
+        setTimeout(() => setLoading(false), 2000);
+      });
+  }, []);
+
+  
+  return (
+    <>
+      <h1>Event Type</h1>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: "20px",
+          marginTop: "4rem",
+          paddingBottom: "2rem",
+          borderBottom: "1px solid #e7f1ff",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
+          <Avatar
+            sx={{ width: 40, height: 40 }}
+            alt="profile logo"
+            //   src={}
+          >
+            K
+          </Avatar>
+          <div>
+            <h3>{data.name}</h3>
+            <h3>
+              booking link for all event
+              {`${config.clientBaseUrl}/book/${data.id}`}
+            </h3>
+          </div>
+        </div>
+        <CreateEventPopOver>
+          {/* <Button
+            className="new_create_button"
+            variant="outlined"
+            color="primary"
+          >
+          </Button> */}
+          new event type
+        </CreateEventPopOver>
+      </div>
+      {loading && <Loader />}
+      {!loading && (
+        <div
+          style={{
+            display: "flex",
+            marginTop: "2rem",
+            gap: "1.5rem",
+            flexWrap: "wrap",
+          }}
+        >
+          {events.map((et) => (
+            <EventTypeCard eventType={et} key={et.id} />
+          ))}
+        </div>
+      )}
+    </>
+  );
+};
+
+export default EventTypes;

@@ -1,11 +1,16 @@
 import StartAndEndTime from "./StartAndEndTime";
-import { weekDays } from "../../utils";
+// import { weekDays } from "../../utils";
+import { useState } from "react";
+import WeekDay from "./WeekDay";
 
 const Availability = () => {
+  const [weekDays, setWeekDays] = useState([]);
   const payload = {};
-  const handleCheckBoxSelect = (e) => {
-    console.log(e.target.value);
-  };
+
+  useState(() => {
+    
+  }, []);
+
   return (
     <>
       <h1>Availability</h1>
@@ -26,31 +31,7 @@ const Availability = () => {
           <h3>Weekly hours</h3>
           <div className="weekly_hour_container">
             {weekDays.map((week) => (
-              <div key={week} className="week_days">
-                <div style={{ marginRight: "40px" }}>
-                  <label
-                    style={{
-                      width: "3rem",
-                      display: "flex",
-                      gap: "10px",
-                      alignItems: "center",
-                    }}
-                    htmlFor={week}
-                  >
-                    <input
-                      onChange={handleCheckBoxSelect}
-                      id={week}
-                      type="checkbox"
-                      style={{
-                        width: "25px",
-                        height: "25px",
-                      }}
-                    />
-                    {week.toUpperCase()}
-                  </label>
-                </div>
-                <StartAndEndTime />
-              </div>
+              <WeekDay key={week} week={week} />
             ))}
           </div>
         </div>

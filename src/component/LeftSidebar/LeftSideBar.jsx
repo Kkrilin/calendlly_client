@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
+import CreateEventPopOver from "../Utils/PopOver/CreateEventPopOver";
 
 const LeftSideBar = () => {
   return (
@@ -14,7 +15,7 @@ const LeftSideBar = () => {
           height: "15vh",
         }}
       >
-        <Link className="header_logo" to="user/event_type">
+        <Link className="header_logo" to="/user/event_type">
           <img
             className="logo"
             decoding="async"
@@ -34,9 +35,11 @@ const LeftSideBar = () => {
             Calendlly
           </h4>
         </Link>
-        <Button className="create_button" variant="outlined" color="primary">
+        <CreateEventPopOver>
+          {/* <Button className="create_button" variant="outlined" color="primary">
+        </Button> */}
           Create
-        </Button>
+        </CreateEventPopOver>
       </div>
       <div
         style={{

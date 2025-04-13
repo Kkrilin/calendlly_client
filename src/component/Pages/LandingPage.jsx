@@ -4,10 +4,16 @@ import { config } from "../../config";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { setProfileData } from "../../redux/profileSlice";
+import { useDispatch } from "react-redux";
+import { toast } from "react-hot-toast";
 const serverBaseUrl = config.serverBaseUrl;
+
 const LandingPage = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleGoogleAuth = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       const header = {
@@ -33,11 +39,13 @@ const LandingPage = () => {
           `${serverBaseUrl}/auth/google`,
           payload
         );
+        console.log("token", usersignUpResponse.data.token);
         localStorage.setItem("token", usersignUpResponse.data.token);
-        navigate("/user/event_type", {
-          state: { data: usersignUpResponse.data },
-        });
+        dispatch(setProfileData({ data: usersignUpResponse.data.userData }));
+        navigate("/user/event_type");
       } catch (error) {
+        toast.error(error.response.data.message);
+
         setError(error.message);
       }
     },

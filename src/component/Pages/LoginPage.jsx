@@ -5,12 +5,16 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { config } from "../../config";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { setProfileData } from "../../redux/profileSlice";
+import { useDispatch } from "react-redux";
 
 const serverBaseUrl = config.serverBaseUrl;
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const dispatch = useDispatch();
+
   const payload = {
     email,
     password,
@@ -32,11 +36,12 @@ const LoginPage = () => {
     try {
       const loginRes = await axios.post(loginUrl, payload);
       localStorage.setItem("token", loginRes.data.token);
-      navigate("/user/event_type", { state: { data: loginRes.data } });
+      dispatch(setProfileData({ data: loginRes.data.userData }));
+      navigate("/user/event_type");
     } catch (error) {
       setError(error.message);
       console.log(error);
-      toast.error(error.message);
+      toast.error(error.response.data.message);
     }
   };
 
@@ -66,10 +71,9 @@ const LoginPage = () => {
           `${serverBaseUrl}/auth/google`,
           payload
         );
+        dispatch(setProfileData({ data: userLoginResponse.data.userData }));
         localStorage.setItem("token", userLoginResponse.data.token);
-        navigate("/user/event_type", {
-          state: { data: userLoginResponse.data },
-        });
+        navigate("/user/event_type");
       } catch (error) {
         setError(error.message);
       }
