@@ -2,9 +2,15 @@ import { useParams } from "react-router-dom";
 import MyCalendar from "../MyCalendar/MyCalendar";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { availabilityBaseUrl, header, eventLookUpUrl } from "../../api";
+import {
+  availabilityBaseUrl,
+  header,
+  eventLookUpUrl,
+  getTimeSlotsUrl,
+} from "../../api";
 import toast from "react-hot-toast";
 import { getTimeSlots } from "../../utils";
+import moment from "moment";
 
 import { Stack } from "@mui/material";
 import BookEventPopOver from "../Utils/PopOver/BookEventPopOver";
@@ -12,8 +18,11 @@ import BookEventPopOver from "../Utils/PopOver/BookEventPopOver";
 const OneEvent = () => {
   const [availabilities, setAvailabilities] = useState([]);
   const [eventType, setEventType] = useState({});
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(null);
   const [bookTime, setBookTime] = useState("");
+  const [timeSlots, setTimeSlots] = useState([]);
+  // const [duration, setDuration] = useState([])
+  const [bookingResponse, setBookingResponse] = useState(null);
   const params = useParams();
   const token = localStorage.getItem("token");
   useEffect(() => {
@@ -27,24 +36,6 @@ const OneEvent = () => {
       .catch((error) => console.log(error));
   }, []);
 
-  const availabilityOnWeekDay = availabilities.find(
-    (av) => av.active && av.day_of_week === date.getDay()
-  );
-  const startTime = availabilityOnWeekDay?.start_time;
-  const endTime = availabilityOnWeekDay?.end_time;
-  const meetingDuration = eventType?.durationMinutes;
-  let timeSlots = [];
-  if (startTime && endTime && meetingDuration) {
-    timeSlots = getTimeSlots(startTime, endTime, meetingDuration);
-  }
-  console.log(
-    meetingDuration,
-    "meetingDuration",
-    "endTime",
-    endTime,
-    "startTime",
-    startTime
-  );
   useEffect(() => {
     axios
       .get(`${eventLookUpUrl}/${params.userId}/${params.eventId}`, header)
@@ -55,7 +46,26 @@ const OneEvent = () => {
         toast.error(error.message);
       });
   }, []);
+  useEffect(() => {
+    if (date) {
+      header.params = {
+        meetingDate: date,
+      };
+      axios
+        .get(`${getTimeSlotsUrl}/${params.userId}/${params.eventId}`, header)
+        .then((res) => {
+          setTimeSlots(res.data.timeSlots);
+        })
+        .catch((error) => {
+          toast.error(error.message);
+        });
+    }
+  }, [date]);
 
+  if (bookingResponse) {
+    toast.success("booking successFull");
+    return <h1>booking successFull</h1>;
+  }
   return (
     <div
       style={{
@@ -67,17 +77,41 @@ const OneEvent = () => {
     >
       <div className="one_event">
         <div style={{ width: "25%" }}>
-          <h1>{[params.userId, params.eventId]}</h1>
+          <h1>{eventType.title}</h1>
+          <h5>{eventType.durationMinutes}</h5>
+          {/* <label
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              gap: "6px",
+              marginBottom: "16px",
+            }}
+            htmlFor="duration"
+          >
+            Duration
+            <select
+              onChange={(e) => setDuration(e.target.value)}
+              id="duration"
+              className="select_option"
+              defaultValue={`${duration} min`}
+            >
+              <option value="15">15 min</option>
+              <option value="30">30 min</option>
+              <option value="60">60 min</option>
+            </select>
+          </label> */}
         </div>
         <div>
           <MyCalendar
             availabilities={availabilities}
             date={date}
             setDate={setDate}
+            setTimeSlots={setTimeSlots}
           />
         </div>
         <div>
-          <p>{date.toDateString()}</p>
+          {date && <p>{date.toDateString()}</p>}
           {/* <h1>{date.getDay()}</h1> */}
           <div
             style={{
@@ -88,12 +122,14 @@ const OneEvent = () => {
             }}
           >
             <div style={{ width: "14rem" }}>
-              {timeSlots.map((time, id) => (
+              {timeSlots.map((timeSlot, id) => (
                 <Time
                   key={id}
-                  time={time}
+                  timeSlot={timeSlot}
                   setBookTime={setBookTime}
                   bookTime={bookTime}
+                  date={date && moment(date).format("YYYY-MM-DD")}
+                  setBookingResponse={setBookingResponse}
                 />
               ))}
             </div>
@@ -104,7 +140,13 @@ const OneEvent = () => {
   );
 };
 
-const Time = ({ time, bookTime, setBookTime }) => {
+const Time = ({
+  timeSlot,
+  bookTime,
+  setBookTime,
+  date,
+  setBookingResponse,
+}) => {
   return (
     <div
       style={{
@@ -117,15 +159,23 @@ const Time = ({ time, bookTime, setBookTime }) => {
       <span
         className="book_time"
         style={{
-          backgroundColor: `${bookTime === time ? "grey" : "white"}`,
-          width: `${bookTime === time ? "6.5rem" : "14rem"}`,
-          color: `${bookTime === time ? "white" : "#0066e6"}`,
+          backgroundColor: `${bookTime === timeSlot ? "grey" : "white"}`,
+          width: `${bookTime === timeSlot ? "6.5rem" : "14rem"}`,
+          color: `${bookTime === timeSlot ? "white" : "#0066e6"}`,
         }}
         onClick={(e) => setBookTime(e.target.innerText)}
       >
-        {time}
+        {timeSlot}
       </span>
-      {bookTime === time && <BookEventPopOver>next</BookEventPopOver>}
+      {bookTime === timeSlot && (
+        <BookEventPopOver
+          setBookingResponse={setBookingResponse}
+          bookTime={bookTime}
+          bookDate={date}
+        >
+          next
+        </BookEventPopOver>
+      )}
     </div>
   );
 };

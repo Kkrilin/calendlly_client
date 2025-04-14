@@ -14,6 +14,7 @@ import SettingAvailabilty from "./component/Availability/SettingAvailabilty";
 import OneEvent from "./component/Booking/OneEvent";
 import AllEvent from "./component/Booking/AllEvent";
 import { Toaster } from "react-hot-toast";
+import Meeting from "./component/Meeting/Meeting";
 function App() {
   return (
     <BrowserRouter>
@@ -28,7 +29,7 @@ function App() {
         <Route path="/setting/availabilty" element={<SettingAvailabilty />} />
         <Route path="/user" element={<ProfileLayout />}>
           <Route index path="event_type" element={<EventTypes />} />
-          <Route path="meeting" element={<h1>editttttt</h1>} />
+          <Route path="meeting" element={<Meeting />} />
           <Route path="availability" element={<Availability />} />
         </Route>
         <Route path="/book/event/:userId" element={<AllEvent />} />

@@ -68,3 +68,4 @@ function format12Hour(date) {
     hour12: true,
   });
 }
+

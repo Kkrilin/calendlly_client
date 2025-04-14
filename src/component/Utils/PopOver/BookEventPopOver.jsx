@@ -2,7 +2,13 @@ import * as React from "react";
 import Popover from "@mui/material/Popover";
 import Button from "@mui/material/Button";
 import BookEvent from "../../Booking/BookEvent";
-export default function BookEventPopOver({ children }) {
+
+export default function BookEventPopOver({
+  children,
+  bookTime,
+  bookDate,
+  setBookingResponse
+}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -42,7 +48,12 @@ export default function BookEventPopOver({ children }) {
           horizontal: "right",
         }}
       >
-        <BookEvent handleClose={handleClose} />
+        <BookEvent
+          bookTime={bookTime}
+          bookDate={bookDate}
+          handleClose={handleClose}
+          setBookingResponse={setBookingResponse}
+        />
       </Popover>
     </div>
   );

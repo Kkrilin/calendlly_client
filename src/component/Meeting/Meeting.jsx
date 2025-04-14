@@ -1,10 +1,22 @@
 import { Avatar, Button } from "@mui/material";
-
-import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { bookingBaseUrl, header } from "../../api";
+import toast from "react-hot-toast";
 const Meeting = () => {
-  const location = useLocation();
-  const { state } = location;
-  const { data } = state;
+  const [meetings, setMeetings] = useState({});
+
+  useEffect(() => {
+    axios
+      .get(bookingBaseUrl, header)
+      .then((res) => {
+        setMeetings(res.data.meetings);
+        console.log(res.data);
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  }, []);
   return (
     <>
       <h1>Meeting</h1>
@@ -20,28 +32,15 @@ const Meeting = () => {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
-          <Avatar
-            sx={{ width: 40, height: 40 }}
-            alt="profile logo"
-            //   src={}
-          >
-            K
-          </Avatar>
           <div>
-            <h3>Kundan singh patel</h3>
-            <h3>
-              booking link for all event
-              (http://localhost:5173/book/kundansingh066)
-            </h3>
+            <h3>UpComingMeeting</h3>
           </div>
         </div>
-        <Button
+        {/* <Button
           className="new_create_button"
           variant="outlined"
           color="primary"
-        >
-          new event type
-        </Button>
+        ></Button> */}
       </div>
     </>
   );

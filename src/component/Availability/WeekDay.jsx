@@ -8,6 +8,30 @@ const WeekDay = ({ avail }) => {
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
+    console.log(avail, "availabiliteis");
+    const [startHours, startMinute] = avail?.start_time?.split(":");
+    const [endHours, endMinute] = avail?.end_time?.split(":");
+    const startTime = new Date(
+      0,
+      0,
+      0,
+      startHours,
+      startMinute
+    ).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+    const endTime = new Date(0, 0, 0, endHours, endMinute).toLocaleTimeString(
+      [],
+      {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      }
+    );
+    setStartTime(startTime);
+    setEndTime(endTime);
     setChecked(!!avail.active);
   }, []);
 
