@@ -61,11 +61,10 @@ export function getTimeSlots(startTime, endTime, meetingDuration) {
   return slots;
 }
 
-function format12Hour(date) {
+export function format12Hour(date) {
   return date.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
   });
 }
-

@@ -1,14 +1,9 @@
 import * as React from "react";
 import Popover from "@mui/material/Popover";
 import Button from "@mui/material/Button";
-import BookEvent from "../../Booking/BookEvent";
+import EditProfile from "../../ProfileHeader/EditProfile.jsx";
 
-export default function BookEventPopOver({
-  children,
-  bookTime,
-  bookDate,
-  setBookingResponse,
-}) {
+export default function LogoutPopOver({ children, eventType }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -24,36 +19,27 @@ export default function BookEventPopOver({
 
   return (
     <div>
-      <span
-        className="next"
-        aria-describedby={id}
-        variant="contained"
+      <div
         onClick={handleClick}
+        style={{ display: "flex", alignItems: "center" }}
       >
         {children}
-      </span>
+      </div>
       <Popover
         id={id}
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}
-        anchorReference="anchorPosition"
-        anchorPosition={{ top: 300, left: 1200 }}
         anchorOrigin={{
           vertical: "top",
-          horizontal: "right",
+          horizontal: "left",
         }}
         transformOrigin={{
           vertical: "top",
           horizontal: "right",
         }}
       >
-        <BookEvent
-          bookTime={bookTime}
-          bookDate={bookDate}
-          handleClose={handleClose}
-          setBookingResponse={setBookingResponse}
-        />
+        <EditProfile handleClose={handleClose} />
       </Popover>
     </div>
   );

@@ -9,7 +9,7 @@ import {
   getTimeSlotsUrl,
 } from "../../api";
 import toast from "react-hot-toast";
-import { getTimeSlots } from "../../utils";
+
 import moment from "moment";
 
 import { Stack } from "@mui/material";
@@ -18,10 +18,10 @@ import BookEventPopOver from "../Utils/PopOver/BookEventPopOver";
 const OneEvent = () => {
   const [availabilities, setAvailabilities] = useState([]);
   const [eventType, setEventType] = useState({});
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState(new Date());
   const [bookTime, setBookTime] = useState("");
   const [timeSlots, setTimeSlots] = useState([]);
-  // const [duration, setDuration] = useState([])
+  const [duration, setDuration] = useState([]);
   const [bookingResponse, setBookingResponse] = useState(null);
   const params = useParams();
   const token = localStorage.getItem("token");
@@ -64,7 +64,13 @@ const OneEvent = () => {
 
   if (bookingResponse) {
     toast.success("booking successFull");
-    return <h1>booking successFull</h1>;
+    return (
+      <div style={{ height: "100vh", display: "grid", placeItems: "center" }}>
+        <div className="booking_success_card">
+          <h1>Booking SuccsessFull</h1>
+        </div>
+      </div>
+    );
   }
   return (
     <div
@@ -76,9 +82,25 @@ const OneEvent = () => {
       }}
     >
       <div className="one_event">
-        <div style={{ width: "25%" }}>
-          <h1>{eventType.title}</h1>
-          <h5>{eventType.durationMinutes}</h5>
+        <div
+          style={{
+            width: "30%",
+            borderRight: "1px solid grey",
+            padding: "2rem",
+            display: "flex",
+            flexDirection: "column",
+            gap: "1rem",
+          }}
+        >
+          <h4>{eventType.User?.name}</h4>
+          <h4>
+            <span>EventType: </span>
+            <span className="name">{eventType.title} </span>
+          </h4>
+          <h5>
+            <span>Event Duration(minutes): </span>
+            <span className="name">{eventType.durationMinutes} </span>
+          </h5>
           {/* <label
             style={{
               display: "flex",
@@ -102,37 +124,51 @@ const OneEvent = () => {
             </select>
           </label> */}
         </div>
-        <div>
-          <MyCalendar
-            availabilities={availabilities}
-            date={date}
-            setDate={setDate}
-            setTimeSlots={setTimeSlots}
-          />
-        </div>
-        <div>
-          {date && <p>{date.toDateString()}</p>}
-          {/* <h1>{date.getDay()}</h1> */}
+        <div style={{ padding: "2rem" }}>
+          <h3 style={{}}>Select date and Time</h3>
           <div
             style={{
-              overflowY: "scroll",
-              height: "60vh",
-              margin: "1rem 0",
-              width: "20rem",
+              display: "flex",
+              alignItems: "start",
+              gap: "2rem",
+              paddingTop: "1rem",
             }}
           >
-            <div style={{ width: "14rem" }}>
-              {timeSlots.map((timeSlot, id) => (
-                <Time
-                  key={id}
-                  timeSlot={timeSlot}
-                  setBookTime={setBookTime}
-                  bookTime={bookTime}
-                  date={date && moment(date).format("YYYY-MM-DD")}
-                  setBookingResponse={setBookingResponse}
-                />
-              ))}
+            <div>
+              <MyCalendar
+                availabilities={availabilities}
+                date={date}
+                setDate={setDate}
+                setTimeSlots={setTimeSlots}
+              />
             </div>
+            {date && (
+              <div>
+                {date && <p>{date.toDateString()}</p>}
+                {/* <h1>{date.getDay()}</h1> */}
+                <div
+                  style={{
+                    overflowY: "auto",
+                    height: "60vh",
+                    margin: "1rem 0",
+                    width: "20rem",
+                  }}
+                >
+                  <div style={{ width: "14rem" }}>
+                    {timeSlots.map((timeSlot, id) => (
+                      <Time
+                        key={id}
+                        timeSlot={timeSlot}
+                        setBookTime={setBookTime}
+                        bookTime={bookTime}
+                        date={date && moment(date).format("YYYY-MM-DD")}
+                        setBookingResponse={setBookingResponse}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

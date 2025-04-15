@@ -3,9 +3,19 @@ import { generateTimeOptions, toSeconds } from "../../utils";
 
 const timeOptions = generateTimeOptions(15, 12);
 import HoursDropDown from "../Utils/HoursDropDown";
-const StartAndEndTime = ({ setStartTime, setEndTime, startTime, endTime }) => {
-  const [error, setError] = useState("");
-
+import axios from "axios";
+import { availabilityBaseUrl, header } from "../../api";
+import toast from "react-hot-toast";
+const StartAndEndTime = ({
+  setStartTime,
+  setEndTime,
+  startTime,
+  endTime,
+  checked,
+  avail,
+  setError,
+  error,
+}) => {
   useEffect(() => {
     if (toSeconds(startTime) > toSeconds(endTime)) {
       setError("startTime is large");
@@ -18,13 +28,57 @@ const StartAndEndTime = ({ setStartTime, setEndTime, startTime, endTime }) => {
       setError("");
     }
   }, [startTime, endTime]);
+
+  const token = localStorage.getItem("token");
+  header.headers.Authorization = `Bearer ${token}`;
+
+  const handleStartTimeChange = (e) => {
+    if (error) {
+      return;
+    }
+    const payload = {
+      active: checked ? 1 : 0,
+      startTime: e.target.value,
+      endTime,
+    };
+    setStartTime(e.target.value);
+    axios
+      .put(`${availabilityBaseUrl}/${avail.id}`, payload, header)
+      .then((res) => {
+        toast.success("changes saved");
+      })
+      .catch((error) => {
+        toast.error(error.messages);
+      });
+  };
+
+  const handleEndTimeChange = (e) => {
+    if (error) {
+      return;
+    }
+    const payload = {
+      active: checked ? 1 : 0,
+      startTime,
+      endTime: e.target.value,
+    };
+
+    setEndTime(e.target.value);
+    axios
+      .put(`${availabilityBaseUrl}/${avail.id}`, payload, header)
+      .then((res) => {
+        toast.success("changes saved");
+      })
+      .catch((error) => {
+        toast.error(error.messages);
+      });
+  };
   return (
     <div>
       <div style={{ display: "flex", alignItems: "center" }}>
         <select
           className="select_option"
           value={startTime}
-          onChange={(e) => setStartTime(e.target.value)}
+          onChange={handleStartTimeChange}
         >
           {timeOptions.map((time) => (
             <option key={time} value={time}>
@@ -36,7 +90,7 @@ const StartAndEndTime = ({ setStartTime, setEndTime, startTime, endTime }) => {
         <select
           className="select_option"
           value={endTime}
-          onChange={(e) => setEndTime(e.target.value)}
+          onChange={handleEndTimeChange}
         >
           {timeOptions.map((time) => (
             <option key={time} value={time}>

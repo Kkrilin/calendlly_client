@@ -15,33 +15,18 @@ const LandingPage = () => {
   const dispatch = useDispatch();
 
   const handleGoogleAuth = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      const header = {
-        headers: {
-          Authorization: `Bearer ${tokenResponse.access_token}`,
-        },
-      };
+    flow: "auth-code",
+    scope:
+      "openid email profile https://www.googleapis.com/auth/calendar.events",
+    access_type: "offline",
+    prompt: "consent",
+    onSuccess: async ({ code }) => {
+      console.log("code", code);
       try {
-        const res = await axios.get(
-          "https://www.googleapis.com/oauth2/v3/userinfo",
-          header
-        );
-
-        const payload = {
-          email: res.data.email,
-          email_verified: res.data.email_verified,
-          given_name: res.data.given_name,
-          name: res.data.name,
-          pictureUrl: res.data.picture,
-          googleId: res.data.sub,
-        };
-        const usersignUpResponse = await axios.post(
-          `${serverBaseUrl}/auth/google`,
-          payload
-        );
-        console.log("token", usersignUpResponse.data.token);
-        localStorage.setItem("token", usersignUpResponse.data.token);
-        dispatch(setProfileData({ data: usersignUpResponse.data.userData }));
+        const res = await axios.post(`${serverBaseUrl}/auth/google`, { code });
+        console.log("token", res.data.token);
+        localStorage.setItem("token", res.data.token);
+        dispatch(setProfileData({ data: res.data.userData }));
         navigate("/user/event_type");
       } catch (error) {
         toast.error(error.response.data.message);

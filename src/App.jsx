@@ -6,6 +6,7 @@ import SignupPage from "./component/Pages/SignupPage";
 import Header from "./component/Header/Header";
 import Footer from "./component/Footer/Footer";
 import HomePage from "./component/Pages/HomePage";
+import EditProfilePage from "./component/Pages/EditProfilePage.jsx";
 import LandingLaylout from "./component/Layout/LandingLayout";
 import ProfileLayout from "./component/Layout/ProfileLayout";
 import EventTypes from "./component/EventTypes/EventTypes";
@@ -14,7 +15,7 @@ import SettingAvailabilty from "./component/Availability/SettingAvailabilty";
 import OneEvent from "./component/Booking/OneEvent";
 import AllEvent from "./component/Booking/AllEvent";
 import { Toaster } from "react-hot-toast";
-import Meeting from "./component/Meeting/Meeting";
+import AllMeeting from "./component/AllMeeting/AllMeeting.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -29,7 +30,8 @@ function App() {
         <Route path="/setting/availabilty" element={<SettingAvailabilty />} />
         <Route path="/user" element={<ProfileLayout />}>
           <Route index path="event_type" element={<EventTypes />} />
-          <Route path="meeting" element={<Meeting />} />
+          <Route index path="edit" element={<EditProfilePage />} />
+          <Route path="meeting" element={<AllMeeting />} />
           <Route path="availability" element={<Availability />} />
         </Route>
         <Route path="/book/event/:userId" element={<AllEvent />} />

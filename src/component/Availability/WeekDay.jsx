@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
 import StartAndEndTime from "./StartAndEndTime";
 import { dayOfWeeks } from "../../utils";
+import { availabilityBaseUrl, header } from "../../api";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const WeekDay = ({ avail }) => {
   const [startTime, setStartTime] = useState("09:00 am");
   const [endTime, setEndTime] = useState("05:00 pm");
   const [checked, setChecked] = useState(false);
+  const [error, setError] = useState("");
+  const token = localStorage.getItem("token");
+  header.headers.Authorization = `Bearer ${token}`;
 
   useEffect(() => {
     console.log(avail, "availabiliteis");
@@ -35,6 +41,24 @@ const WeekDay = ({ avail }) => {
     setChecked(!!avail.active);
   }, []);
 
+  const handleChecked = (e) => {
+    if (error) {
+      return;
+    }
+    const payload = {
+      active: e.target.checked ? 1 : 0,
+    };
+    axios
+      .put(`${availabilityBaseUrl}/${avail.id}`, payload, header)
+      .then((res) => {
+        setChecked((preState) => !preState);
+        toast.success("changes saved");
+      })
+      .catch((error) => {
+        toast.error(error.messages);
+      });
+  };
+
   return (
     <div className="week_days">
       <div style={{ marginRight: "40px" }}>
@@ -48,7 +72,7 @@ const WeekDay = ({ avail }) => {
           htmlFor={avail.id}
         >
           <input
-            onChange={() => setChecked((preState) => !preState)}
+            onChange={handleChecked}
             id={avail.id}
             type="checkbox"
             style={{
@@ -66,6 +90,10 @@ const WeekDay = ({ avail }) => {
           endTime={endTime}
           setStartTime={setStartTime}
           setEndTime={setEndTime}
+          checked={checked}
+          avail={avail}
+          error={error}
+          setError={setError}
         />
       )}
       {!checked && (
