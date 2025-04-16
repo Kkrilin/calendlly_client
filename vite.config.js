@@ -7,6 +7,6 @@ export default defineConfig({
   preview: {
     port: 10000, // optional, Render provides $PORT anyway
     host: true, // binds to 0.0.0.0
-    allowedHosts: ["https://calendlly-client.onrender.com/"],
+    allowedHosts: ["calendlly-client.onrender.com"], // Only the hostname
   },
-});
+}); 
