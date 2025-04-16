@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { config } from "../../config";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useGoogleLogin } from "@react-oauth/google";
 import { setProfileData } from "../../redux/profileSlice";
 import { useDispatch } from "react-redux";
 
@@ -48,6 +49,30 @@ const SignupPage = () => {
       console.log(error.response?.data?.message);
     }
   };
+
+  const handleGoogleAuth = useGoogleLogin({
+    flow: "auth-code",
+    scope:
+      "openid email profile https://www.googleapis.com/auth/calendar.events",
+    access_type: "offline",
+    prompt: "consent",
+    onSuccess: async ({ code }) => {
+      console.log("code", code);
+      try {
+        const res = await axios.post(`${serverBaseUrl}/auth/google`, { code });
+        console.log("token", res.data.token);
+        localStorage.setItem("token", res.data.token);
+        dispatch(setProfileData({ data: res.data.userData }));
+        navigate("/user/event_type");
+      } catch (error) {
+        toast.error(error.response.data.message);
+
+        setError(error.message);
+      }
+    },
+    onError: (error) => setError(error.message),
+    onNonOAuthError: (error) => setError(error.message),
+  });
 
   return (
     <section className="signup_page">
@@ -188,7 +213,11 @@ const SignupPage = () => {
             >
               Easily connect your calender by signing up with your Google{" "}
             </p>
-            <button className="google_button" style={{ margin: "20px auto" }}>
+            <button
+              onClick={handleGoogleAuth}
+              className="google_button"
+              style={{ margin: "20px auto" }}
+            >
               <span>
                 <img src="https://calendly.com/media/googleLogo.svg" alt="" />
               </span>

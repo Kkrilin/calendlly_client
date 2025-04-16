@@ -7,6 +7,7 @@ import { format12Hour } from "../../utils";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { LucideLoader } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const AllMeeting = () => {
   const [allMeetings, setAllMeetings] = useState({});
@@ -157,6 +158,14 @@ const Meeting = ({ meeting, setAllMeetings, date }) => {
             {meeting.guest_email}
           </h3>
         </div>
+        {meeting.rescheduleReason ? (
+          <div>
+            <p>rescheduleReason: {meeting.rescheduleReason}</p>
+            <p>rescheduleBy: {meeting.rescheduleBy}</p>
+          </div>
+        ) : (
+          ""
+        )}
         <div>
           <h3 style={{ fontWeight: "400" }}>
             <span className="name"> Event Type: </span>
@@ -168,10 +177,12 @@ const Meeting = ({ meeting, setAllMeetings, date }) => {
             <span>Cancel</span>
             <DeleteIcon />
           </div>
-          <div className="delete_res">
-            <span>Reschedule</span>
-            <AutorenewIcon />
-          </div>
+          <Link to={`/booking/rescheduling/${meeting.id}`}>
+            <div className="delete_res">
+              <span>Reschedule</span>
+              <AutorenewIcon />
+            </div>
+          </Link>
         </div>
       </div>
     </div>

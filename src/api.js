@@ -17,3 +17,4 @@ export const bookingBaseUrl = `${serverBaseUrl}/api/bookings`;
 export const eventLookUpUrl = `${serverBaseUrl}/bookings/look-up`;
 export const eventBookingUrl = `${serverBaseUrl}/bookings/events`;
 export const getTimeSlotsUrl = `${serverBaseUrl}/bookings/slots`;
+export const resheduleBookingUrl = `${serverBaseUrl}/bookings/reschedules`

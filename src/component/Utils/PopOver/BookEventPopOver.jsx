@@ -8,6 +8,7 @@ export default function BookEventPopOver({
   bookTime,
   bookDate,
   setBookingResponse,
+  reschedule,
 }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -53,6 +54,7 @@ export default function BookEventPopOver({
           bookDate={bookDate}
           handleClose={handleClose}
           setBookingResponse={setBookingResponse}
+          reschedule={reschedule}
         />
       </Popover>
     </div>

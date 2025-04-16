@@ -14,6 +14,7 @@ import Availability from "./component/Availability/Availability";
 import SettingAvailabilty from "./component/Availability/SettingAvailabilty";
 import OneEvent from "./component/Booking/OneEvent";
 import AllEvent from "./component/Booking/AllEvent";
+import RescheduleBooking from "./component/Booking/RescheduleBooking.jsx";
 import { Toaster } from "react-hot-toast";
 import AllMeeting from "./component/AllMeeting/AllMeeting.jsx";
 function App() {
@@ -36,6 +37,7 @@ function App() {
         </Route>
         <Route path="/book/event/:userId" element={<AllEvent />} />
         <Route path="/book/event/:userId/:eventId" element={<OneEvent />} />
+        <Route path="/booking/rescheduling/:bookingId/" element={<RescheduleBooking />} />
       </Routes>
       {/* <Footer></Footer> */}
     </BrowserRouter>
