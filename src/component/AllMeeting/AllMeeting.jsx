@@ -111,12 +111,19 @@ const Meeting = ({ meeting, setAllMeetings, date }) => {
       .then((res) => {
         toast.success("metting canceled");
         setAllMeetings((prvState) => {
-          const Meetting = prvState[date].filter(
+          const AllMeeting = { ...prvState };
+          const filteredMeeting = AllMeeting[date].filter(
             (meet) => meet.id !== meeting.id
           );
+          if (!filteredMeeting.length) {
+            delete AllMeeting[date];
+            return {
+              ...AllMeeting,
+            };
+          }
           return {
-            ...prvState,
-            [date]: Meetting,
+            ...AllMeeting,
+            [date]: filteredMeeting,
           };
         });
       })
