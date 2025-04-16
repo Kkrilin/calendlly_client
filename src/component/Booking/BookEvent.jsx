@@ -9,6 +9,13 @@ const BookEvent = ({ handleClose, bookTime, bookDate, setBookingResponse }) => {
   const [guestName, setGuestName] = useState("");
   const [guestEmail, setGuestEmail] = useState("");
   const [error, setError] = useState("");
+  const [open, setOpen] = React.useState(false);
+  const handleCloseBackDrop = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
   const params = useParams();
   const { userId, eventId } = params;
   const payload = {
@@ -24,6 +31,7 @@ const BookEvent = ({ handleClose, bookTime, bookDate, setBookingResponse }) => {
       setError("can't be blank");
       return;
     }
+    handleOpen();
     axios
       .post(bookingUrl, payload, header)
       .then((res) => {
@@ -32,6 +40,9 @@ const BookEvent = ({ handleClose, bookTime, bookDate, setBookingResponse }) => {
       })
       .catch((error) => {
         toast.error(`Booking failed with error : ${error.message}`);
+      })
+      .finally(() => {
+        handleCloseBackDrop();
       });
   };
 
@@ -91,12 +102,33 @@ const BookEvent = ({ handleClose, bookTime, bookDate, setBookingResponse }) => {
             {error && !guestEmail && <h5 className="error">{error}</h5>}
           </label>
         </form>
-        <Button onClick={HandleBooking} variant="contained">
+        <SimpleBackdrop open={open} HandleBooking={HandleBooking}>
           Schedule Event
-        </Button>
+        </SimpleBackdrop>
       </div>
     </div>
   );
 };
+
+import * as React from "react";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+
+function SimpleBackdrop({ children, handleOpen, open, HandleBooking }) {
+  return (
+    <div>
+      <Button onClick={HandleBooking} variant="contained">
+        {children}
+      </Button>
+      <Backdrop
+        sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
+        open={open}
+        // onClick={handleClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    </div>
+  );
+}
 
 export default BookEvent;

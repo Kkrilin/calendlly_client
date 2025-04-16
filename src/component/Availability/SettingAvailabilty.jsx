@@ -11,9 +11,14 @@ import { useNavigate } from "react-router-dom";
 const SettingAvailabilty = () => {
   const [availabilities, setAvailabilities] = useState([]);
   const token = localStorage.getItem("token");
+  const [availabilityError, setAvailablityError] = useState(false);
   header.headers.Authorization = `Bearer ${token}`;
   const navigate = useNavigate();
   const handleSubmit = () => {
+    if (availabilityError) {
+      toast.error("availabilty is not correct");
+      return;
+    }
     const selectWeekDay = availabilities.some((av) => av.active);
     if (!selectWeekDay || !availabilities.length) {
       toast.error("please select at least one");
@@ -57,6 +62,7 @@ const SettingAvailabilty = () => {
                   key={week}
                   week={week}
                   setAvailabilities={setAvailabilities}
+                  setAvailablityError={setAvailablityError}
                 />
               ))}
             </div>
@@ -68,10 +74,11 @@ const SettingAvailabilty = () => {
   );
 };
 
-const WeekDay = ({ week, setAvailabilities }) => {
+const WeekDay = ({ week, setAvailabilities, setAvailablityError }) => {
   const [startTime, setStartTime] = useState("09:00 am");
   const [endTime, setEndTime] = useState("05:00 pm");
   const [checked, setChecked] = useState(false);
+  const [error, setError] = useState("");
   useEffect(() => {
     if (setAvailabilities && !setAvailabilities.length) {
       setAvailabilities((preState) => {
@@ -127,6 +134,9 @@ const WeekDay = ({ week, setAvailabilities }) => {
         endTime={endTime}
         setStartTime={setStartTime}
         setEndTime={setEndTime}
+        setError={setError}
+        error={error}
+        setAvailablityError={setAvailablityError}
       />
     </div>
   );

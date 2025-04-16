@@ -6,11 +6,14 @@ import toast from "react-hot-toast";
 import { format12Hour } from "../../utils";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
+import { LucideLoader } from "lucide-react";
 
 const AllMeeting = () => {
   const [allMeetings, setAllMeetings] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     axios
       .get(bookingBaseUrl, header)
       .then((res) => {
@@ -18,8 +21,15 @@ const AllMeeting = () => {
       })
       .catch((error) => {
         toast.error(error.message);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
+
+  // if (loading) {
+  //   return <LucideLoader />;
+  // }
 
   console.log("allMeetings", allMeetings);
   return (
@@ -50,14 +60,18 @@ const AllMeeting = () => {
           </div>
         </div>
         {Object.keys(allMeetings).map((date) => (
-          <Meetings date={date} meetings={allMeetings[date]} />
+          <Meetings
+            date={date}
+            meetings={allMeetings[date]}
+            setAllMeetings={setAllMeetings}
+          />
         ))}
       </div>
     </div>
   );
 };
 
-const Meetings = ({ date, meetings }) => {
+const Meetings = ({ date, meetings, setAllMeetings }) => {
   const options = {
     weekday: "long",
     year: "numeric",
@@ -78,13 +92,17 @@ const Meetings = ({ date, meetings }) => {
         {new Date(date).toLocaleDateString(undefined, options)}
       </h3>
       {meetings.map((meeting) => (
-        <Meeting meeting={meeting} />
+        <Meeting
+          meeting={meeting}
+          setAllMeetings={setAllMeetings}
+          date={date}
+        />
       ))}
     </div>
   );
 };
 
-const Meeting = ({ meeting }) => {
+const Meeting = ({ meeting, setAllMeetings, date }) => {
   const token = localStorage.getItem("token");
   header.headers.Authorization = `Bearer ${token}`;
   const handleMeetingCancel = () => {
@@ -92,6 +110,15 @@ const Meeting = ({ meeting }) => {
       .delete(`${bookingBaseUrl}/${meeting.id}`, header)
       .then((res) => {
         toast.success("metting canceled");
+        setAllMeetings((prvState) => {
+          const Meetting = prvState[date].filter(
+            (meet) => meet.id !== meeting.id
+          );
+          return {
+            ...prvState,
+            [date]: Meetting,
+          };
+        });
       })
       .catch((error) => {
         toast.error(error.message);

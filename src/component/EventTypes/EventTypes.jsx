@@ -30,7 +30,7 @@ const EventTypes = () => {
       })
       .catch((error) => console.log(error))
       .finally(() => {
-        setTimeout(() => setLoading(false), 800);
+        setLoading(false);
       });
   }, []);
 
@@ -60,7 +60,7 @@ const EventTypes = () => {
             <h3>{data.name}</h3>
             <h3>booking link for all event</h3>
             <Link
-            style={{color:"blue"}}
+              style={{ color: "blue" }}
               to={`${config.clientBaseUrl}/book/event/${data.id}`}
               target="_blank"
             >{`${config.clientBaseUrl}/book/event/${data.id}`}</Link>

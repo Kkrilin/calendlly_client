@@ -15,7 +15,30 @@ const StartAndEndTime = ({
   avail,
   setError,
   error,
+  setAvailablityError,
 }) => {
+  const checkError = (startTime, endTime) => {
+    if (toSeconds(startTime) > toSeconds(endTime)) {
+      if (setAvailablityError) {
+        setAvailablityError(true);
+      }
+      setError("startTime is large");
+      return true;
+    }
+    if (toSeconds(startTime) === toSeconds(endTime)) {
+      if (setAvailablityError) {
+        setAvailablityError(true);
+      }
+      setError("startTime and endTime equal");
+      return true;
+    } else {
+      if (setAvailablityError) {
+        setAvailablityError(false);
+      }
+      setError("");
+    }
+    return false;
+  };
   useEffect(() => {
     if (toSeconds(startTime) > toSeconds(endTime)) {
       setError("startTime is large");
@@ -27,21 +50,22 @@ const StartAndEndTime = ({
     } else {
       setError("");
     }
-  }, [startTime, endTime]);
+  }, []);
 
   const token = localStorage.getItem("token");
   header.headers.Authorization = `Bearer ${token}`;
 
   const handleStartTimeChange = (e) => {
-    if (error) {
+    setStartTime(e.target.value);
+    if (checkError(e.target.value, endTime)) {
       return;
     }
+
     const payload = {
       active: checked ? 1 : 0,
       startTime: e.target.value,
       endTime,
     };
-    setStartTime(e.target.value);
     axios
       .put(`${availabilityBaseUrl}/${avail.id}`, payload, header)
       .then((res) => {
@@ -53,7 +77,8 @@ const StartAndEndTime = ({
   };
 
   const handleEndTimeChange = (e) => {
-    if (error) {
+    setEndTime(e.target.value);
+    if (checkError(startTime, e.target.value)) {
       return;
     }
     const payload = {
@@ -62,7 +87,6 @@ const StartAndEndTime = ({
       endTime: e.target.value,
     };
 
-    setEndTime(e.target.value);
     axios
       .put(`${availabilityBaseUrl}/${avail.id}`, payload, header)
       .then((res) => {

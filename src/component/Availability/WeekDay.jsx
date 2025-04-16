@@ -4,6 +4,7 @@ import { dayOfWeeks } from "../../utils";
 import { availabilityBaseUrl, header } from "../../api";
 import axios from "axios";
 import toast from "react-hot-toast";
+import moment from "moment";
 
 const WeekDay = ({ avail }) => {
   const [startTime, setStartTime] = useState("09:00 am");
@@ -15,8 +16,10 @@ const WeekDay = ({ avail }) => {
 
   useEffect(() => {
     console.log(avail, "availabiliteis");
+    console.log("avail?.start_time", avail?.start_time);
     const [startHours, startMinute] = avail?.start_time?.split(":");
     const [endHours, endMinute] = avail?.end_time?.split(":");
+
     const startTime = new Date(
       0,
       0,
@@ -42,9 +45,6 @@ const WeekDay = ({ avail }) => {
   }, []);
 
   const handleChecked = (e) => {
-    if (error) {
-      return;
-    }
     const payload = {
       active: e.target.checked ? 1 : 0,
     };
