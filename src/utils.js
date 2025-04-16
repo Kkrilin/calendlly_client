@@ -62,7 +62,10 @@ export function getTimeSlots(startTime, endTime, meetingDuration) {
 }
 
 export function format12Hour(date) {
-  return date.toLocaleTimeString("en-US", {
+  const istDate = new Date(
+    date.toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+  );
+  return istDate.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,

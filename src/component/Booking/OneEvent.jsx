@@ -155,16 +155,23 @@ const OneEvent = () => {
                   }}
                 >
                   <div style={{ width: "14rem" }}>
-                    {timeSlots.map((timeSlot, id) => (
-                      <Time
-                        key={id}
-                        timeSlot={timeSlot}
-                        setBookTime={setBookTime}
-                        bookTime={bookTime}
-                        date={date && moment(date).format("YYYY-MM-DD")}
-                        setBookingResponse={setBookingResponse}
-                      />
-                    ))}
+                    {timeSlots.length ? (
+                      timeSlots.map((timeSlot, id) => (
+                        <Time
+                          key={id}
+                          timeSlot={timeSlot}
+                          setBookTime={setBookTime}
+                          bookTime={bookTime}
+                          date={date && moment(date).format("YYYY-MM-DD")}
+                          setBookingResponse={setBookingResponse}
+                        />
+                      ))
+                    ) : (
+                      <h3>
+                        there is no availability for the day please select
+                        another day
+                      </h3>
+                    )}
                   </div>
                 </div>
               </div>
