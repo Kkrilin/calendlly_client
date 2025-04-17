@@ -17,6 +17,7 @@ import AllEvent from "./component/Booking/AllEvent";
 import RescheduleBooking from "./component/Booking/RescheduleBooking.jsx";
 import { Toaster } from "react-hot-toast";
 import AllMeeting from "./component/AllMeeting/AllMeeting.jsx";
+import PageNotFound from "./component/PageNotFound/PageNotFound.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -38,6 +39,7 @@ function App() {
         <Route path="/book/event/:userId" element={<AllEvent />} />
         <Route path="/book/event/:userId/:eventId" element={<OneEvent />} />
         <Route path="/booking/rescheduling/:bookingId/" element={<RescheduleBooking />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
       {/* <Footer></Footer> */}
     </BrowserRouter>
