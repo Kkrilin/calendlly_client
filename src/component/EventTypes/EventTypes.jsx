@@ -91,6 +91,18 @@ const EventTypes = () => {
           ))}
         </div>
       )}
+      {!events.length && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "20rem",
+          }}
+        >
+          <CreateEventPopOver>new event type</CreateEventPopOver>
+        </div>
+      )}
     </>
   );
 };

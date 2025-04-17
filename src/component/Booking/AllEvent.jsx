@@ -50,9 +50,11 @@ const AllEvent = () => {
             padding: "2rem 2rem",
           }}
         >
-          {events.map((et) => (
-            <EventTypeCard eventType={et} key={et.id} public />
-          ))}
+          {events.length &&
+            events.map((et) => (
+              <EventTypeCard eventType={et} key={et.id} public />
+            ))}
+          {!events.length && <h3>there is no event</h3>}
         </div>
       </div>
     </div>
