@@ -2,11 +2,17 @@ import * as React from "react";
 import Popover from "@mui/material/Popover";
 import Button from "@mui/material/Button";
 import EventCardSeeting from "../../EventTypes/EventCardSeeting.js";
+import { EventTypeResponse } from "@/constant.js";
 
-export default function EventSettingPopOver({ children, eventType }) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+type EventSettingPopOverProps = {
+  children: React.ReactNode;
+  eventType: EventTypeResponse;
+};
 
-  const handleClick = (event) => {
+export default function EventSettingPopOver({ children, eventType }: EventSettingPopOverProps) {
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setAnchorEl(event.currentTarget);
   };
 

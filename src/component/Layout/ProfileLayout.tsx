@@ -1,26 +1,29 @@
 import { useEffect, useState } from "react";
-import LeftSideBar from "../LeftSidebar/LeftSideBar.js";
-import ProfileHeader from "../ProfileHeader/ProfileHeader.js";
-import { Outlet } from "react-router-dom";
-import { availabilityBaseUrl, header } from "../../api.js";
-import SettingAvailabilty from "../Availability/SettingAvailabilty.js";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import Loader from "../Loader/CircularLoader.js";
+import LeftSideBar from "../LeftSidebar/LeftSideBar";
+import ProfileHeader from "../ProfileHeader/ProfileHeader";
+import { Outlet, useNavigate } from "react-router-dom";
+import { availabilityBaseUrl, header } from "../../api";
+import Loader from "../Loader/CircularLoader";
 import toast from "react-hot-toast";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { AvailabilityResponse } from "@/constant";
 
 function ProfileLayout() {
-  const [isAvailabilityExist, setIsAvailabilityExist] = useState(false);
-  const [error, setError] = useState("");
+  const [isAvailabilityExist, setIsAvailabilityExist] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  header.headers.Authorization = `Bearer ${token}`;
+  if (header.headers && token) {
+    header.headers.Authorization = `Bearer ${token}`;
+  }
+
   useEffect(() => {
+    if (!token) return;
     axios
-      .get(availabilityBaseUrl, header)
-      .then((res) => {
+      .get<{ sucess: 1 | 0, availability: AvailabilityResponse[] }>(availabilityBaseUrl, header)
+      .then((res: AxiosResponse<{ sucess: 1 | 0, availability: AvailabilityResponse[] }>) => {
         if (!res.data.availability.length) {
-          navigate("/setting/availabilty");
+          navigate("/user/setting/availabilty");
         } else {
           setIsAvailabilityExist(true);
         }
@@ -30,13 +33,11 @@ function ProfileLayout() {
       });
   }, []);
 
-  // if (error) {
-  //   return <h1>{error}</h1>;
-  // }
   if (!token) {
-    toast.error("please login again");
+    toast.error("Please login again");
     localStorage.clear();
     setTimeout(() => navigate("/login"), 1000);
+    return null;
   }
 
   if (!isAvailabilityExist) {

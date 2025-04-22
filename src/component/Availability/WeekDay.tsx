@@ -11,7 +11,6 @@ interface WeekDayProps {
   avail: AvailabilityResponse
 }
 
-
 const WeekDay = ({ avail }: WeekDayProps) => {
   const [startTime, setStartTime] = useState("09:00 am");
   const [endTime, setEndTime] = useState("05:00 pm");

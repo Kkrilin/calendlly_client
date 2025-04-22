@@ -5,14 +5,23 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { eventBaseUrl, header } from "../../api";
 import { removeEventType } from "../../redux/eventTypeSlice";
 import { useDispatch } from "react-redux";
+import { EventTypeResponse } from "@/constant";
+import { AppDispatch } from "@/redux/store";
 
 import axios from "axios";
 
-const EventCardSeeting = ({ eventType, handleClose }) => {
-  const dispatch = useDispatch();
+type EventSettingPopOverProps = {
+  handleClose: () => void;
+  eventType: EventTypeResponse;
+};
+
+const EventCardSeeting = ({ eventType, handleClose }: EventSettingPopOverProps) => {
+  const dispatch = useDispatch<AppDispatch>();
 
   const token = localStorage.getItem("token");
-  header.headers.Authorization = `Bearer ${token}`;
+  if (header.headers && token) {
+    header.headers.Authorization = `Bearer ${token}`;
+  }
 
   const deleteEventUrl = `${eventBaseUrl}/${eventType.id}`;
   const handleDelete = () => {
@@ -26,7 +35,7 @@ const EventCardSeeting = ({ eventType, handleClose }) => {
       .catch((error) => {
         toast.error(error.response.data.message);
       })
-      .finally(() => handleClose(null));
+      .finally(() => handleClose());
   };
 
   return (

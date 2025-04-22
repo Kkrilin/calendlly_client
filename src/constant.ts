@@ -3,29 +3,35 @@ export const enum  GoogleUserstatus {
     NEW_USER = "NEW_USER"
 }
 
-export interface GoogleAuthAxiosResponse {
-        success: 1 | 0,
-        userData: {
-          id: string,
-          name: string,
-          email: string,
-          googleId: string,
-        },
-        token: string,
-        status: GoogleUserstatus,
+// Base user structure
+export interface BaseUserData {
+  id: string;
+  name: string;
+  email: string;
+  profileSlug: string;
 }
 
-export interface SignupResponse {
-    success: 1 | 0;
-    token: string;
-    userData: {
-      id:string,
-      name: string;
-      email: string;
-    };
-  }
+// Extend base user structure for Google
+interface GoogleUserData extends BaseUserData {
+  googleId: string;
+}
 
+// Signup response
+export interface SignupResponse {
+  success: 1 | 0;
+  token: string;
+  userData: BaseUserData;
+}
+
+// Login response (same structure as signup)
 export interface LoginResponse extends SignupResponse {}
+
+// Google Auth response
+export interface GoogleAuthAxiosResponse extends Omit<SignupResponse, "userData"> {
+  userData: GoogleUserData;
+  status: GoogleUserstatus;
+}
+
 
 export const enum DayOfWeek {
    SUN = "sun",
@@ -55,4 +61,18 @@ export interface AvailabilityResponse {
   start_time: string | null;
   end_time: string | null;
   active: ActiveStatus;
+}
+
+
+export interface EventTypeResponse {
+  id: string;
+  title: string;
+  description?: string;
+  durationMinutes: number;
+  eventSlug: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt?: string | null;
+  // location?: string; // Uncomment if location is added later
 }

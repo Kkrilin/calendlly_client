@@ -3,10 +3,12 @@ import Popover from "@mui/material/Popover";
 import Button from "@mui/material/Button";
 import CreateEventType from "../../EventTypes/CreateEventType.js";
 
-export default function CreateEventPopOver({ children }) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+type CreateEventPopOverProps = { children: React.ReactNode };
 
-  const handleClick = (event) => {
+export default function CreateEventPopOver({ children }: CreateEventPopOverProps) {
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setAnchorEl(event.currentTarget);
   };
 

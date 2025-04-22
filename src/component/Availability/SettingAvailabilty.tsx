@@ -4,13 +4,16 @@ import { useState, useEffect } from "react";
 // import WeekDay from "./WeekDay";
 import { Button } from "@mui/material";
 import { availabilityBaseUrl, header } from "../../api";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { ActiveStatus, AvailabilityPayload, DayOfWeek } from "@/constant";
+import { ActiveStatus, AvailabilityPayload, AvailabilityResponse, DayOfWeek } from "../../constant";
+import Loader from "../Loader/CircularLoader";
 
 const SettingAvailabilty = () => {
   const [availabilities, setAvailabilities] = useState<AvailabilityPayload[]>([]);
+  const [isAvailabilityExist, setIsAvailabilityExist] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const token: string | null = localStorage.getItem("token");
   const [availabilityError, setAvailablityError] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -38,6 +41,32 @@ const SettingAvailabilty = () => {
       })
       .catch((error) => console.log(error));
   };
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get<{ sucess: 1 | 0, availability: AvailabilityResponse[] }>(availabilityBaseUrl, header)
+      .then((res: AxiosResponse<{ sucess: 1 | 0, availability: AvailabilityResponse[] }>) => {
+        if (res.data.availability.length) {
+          navigate("/user/event_type");
+          setLoading(false)
+        }
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+      }).finally(() => { setLoading(false); });
+  }, []);
+
+  if (!token) {
+    toast.error("Please login again");
+    localStorage.clear();
+    setTimeout(() => navigate("/login"), 1000);
+    return null;
+  }
+
+  if (loading) {
+    return <Loader />
+  }
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
@@ -68,6 +97,7 @@ const SettingAvailabilty = () => {
                   week={week}
                   setAvailabilities={setAvailabilities}
                   setAvailablityError={setAvailablityError}
+                  availabilities={availabilities}
                 />
               ))}
             </div>
@@ -83,15 +113,16 @@ interface WeekDayProps {
   week: DayOfWeek;
   setAvailabilities: React.Dispatch<React.SetStateAction<AvailabilityPayload[]>>;
   setAvailablityError: React.Dispatch<React.SetStateAction<boolean>>;
+  availabilities: AvailabilityPayload[]
 }
 
-const WeekDay = ({ week, setAvailabilities, setAvailablityError }: WeekDayProps) => {
+const WeekDay = ({ week, setAvailabilities, setAvailablityError, availabilities }: WeekDayProps) => {
   const [startTime, setStartTime] = useState<string>("09:00 am");
   const [endTime, setEndTime] = useState<string>("05:00 pm");
   const [checked, setChecked] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   useEffect(() => {
-    if (setAvailabilities && !setAvailabilities.length) {
+    if (availabilities && !availabilities.length) {
       setAvailabilities((preState) => {
         const availability = {
           dayOfWeek: week,
@@ -101,7 +132,7 @@ const WeekDay = ({ week, setAvailabilities, setAvailablityError }: WeekDayProps)
         };
         return [...preState, availability];
       });
-    } else if (setAvailabilities && setAvailabilities.length) {
+    } else if (availabilities && availabilities.length) {
       setAvailabilities((preState) => {
         const filterState = preState.filter((prv) => prv.dayOfWeek !== week);
         const availability = {

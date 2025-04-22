@@ -6,10 +6,16 @@ import { Stack } from "@mui/material";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import EventSettingPopOver from "../Utils/PopOver/EventSettingPopOver";
+import { EventTypeResponse } from "@/constant";
 
 const { clientBaseUrl } = config;
 
-const EventTypeCard = ({ eventType }) => {
+interface EventTypeCardProps {
+  eventType: EventTypeResponse;
+}
+
+const EventTypeCard = ({ eventType }: EventTypeCardProps) => {
+
   const handleCopy = () => {
     const url = `${clientBaseUrl}/book/event/${eventType.userId}/${eventType.id}`;
     navigator.clipboard

@@ -3,7 +3,7 @@ import { generateTimeOptions, toSeconds } from "../../utils";
 import { availabilityBaseUrl, header } from "../../api";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { ActiveStatus, AvailabilityResponse } from "@/constant";
+import { ActiveStatus, AvailabilityResponse } from "../../constant";
 
 const timeOptions = generateTimeOptions(15, 12);
 

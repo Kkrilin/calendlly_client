@@ -31,7 +31,7 @@ function App() {
           <Route path="signup" element={<SignupPage />} />
           <Route path="login" element={<LoginPage />} />
         </Route>
-        <Route path="/setting/availabilty" element={<SettingAvailabilty />} />
+        <Route path="/user/setting/availabilty" element={<SettingAvailabilty />} />
         <Route path="/user" element={<ProfileLayout />}>
           <Route index path="event_type" element={<EventTypes />} />
           <Route index path="edit" element={<EditProfilePage />} />

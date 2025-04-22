@@ -5,13 +5,15 @@ import { header } from "../../api.js";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addEventType } from "../../redux/eventTypeSlice.js";
+import { AppDispatch } from "@/redux/store.js";
+import { EventTypeResponse } from "@/constant.js";
 
-const CreateEventType = ({ handleClose }) => {
-  const [eventName, setEventName] = useState("");
-  const [duration, setDuration] = useState(15);
-  const [error, setError] = useState("");
-  const dispatch = useDispatch();
-  const handleEventNameInput = (e) => {
+const CreateEventType = ({ handleClose }: { handleClose: () => void }) => {
+  const [eventName, setEventName] = useState<string>("");
+  const [duration, setDuration] = useState<number>(15);
+  const [error, setError] = useState<string>("");
+  const dispatch = useDispatch<AppDispatch>();
+  const handleEventNameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.value) {
       setError(`event name can't be empty`);
     } else {
@@ -30,10 +32,10 @@ const CreateEventType = ({ handleClose }) => {
       duration,
     };
     axios
-      .post(eventBaseUrl, payload, header)
+      .post<{ eventType: EventTypeResponse }>(eventBaseUrl, payload, header)
       .then((res) => {
         dispatch(addEventType(res.data.eventType));
-        handleClose(null);
+        handleClose();
       })
       .catch((error) => {
         console.log("error create", error);
@@ -56,7 +58,7 @@ const CreateEventType = ({ handleClose }) => {
           >
             Event Name
             <input
-              onInput={handleEventNameInput}
+              onChange={handleEventNameInput}
               id="event_name"
               type="text"
               placeholder="Name your event"
@@ -76,7 +78,7 @@ const CreateEventType = ({ handleClose }) => {
           >
             Duration
             <select
-              onChange={(e) => setDuration(e.target.value)}
+              onChange={(e) => setDuration(parseInt(e.target.value))}
               id="duration"
               className="select_option"
               defaultValue={duration}
@@ -88,7 +90,7 @@ const CreateEventType = ({ handleClose }) => {
           </label>
         </div>
         <div style={{ display: "flex", justifyContent: "end" }}>
-          <Button onClick={() => handleClose(null)}>cancel</Button>
+          <Button onClick={handleClose}>cancel</Button>
           <Button onClick={handleEventSubmit}>submit</Button>
         </div>
       </div>
