@@ -1,5 +1,12 @@
-export const config = {
+export const config: Config = {
   clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID,
   serverBaseUrl: import.meta.env.VITE_SERVER_BASE_URL,
   clientBaseUrl: import.meta.env.VITE_CLIENT_BASE_URL,
 };
+
+
+export type Config = {
+  clientId: string,
+  serverBaseUrl: string,
+  clientBaseUrl: string
+}

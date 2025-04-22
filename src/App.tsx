@@ -6,7 +6,7 @@ import SignupPage from "./component/Pages/SignupPage";
 import Header from "./component/Header/Header";
 import Footer from "./component/Footer/Footer";
 import HomePage from "./component/Pages/HomePage";
-import EditProfilePage from "./component/Pages/EditProfilePage.jsx";
+import EditProfilePage from "./component/Pages/EditProfilePage.js";
 import LandingLaylout from "./component/Layout/LandingLayout";
 import ProfileLayout from "./component/Layout/ProfileLayout";
 import EventTypes from "./component/EventTypes/EventTypes";
@@ -14,9 +14,9 @@ import Availability from "./component/Availability/Availability";
 import SettingAvailabilty from "./component/Availability/SettingAvailabilty";
 import OneEvent from "./component/Booking/OneEvent";
 import AllEvent from "./component/Booking/AllEvent";
-import RescheduleBooking from "./component/Booking/RescheduleBooking.jsx";
+import RescheduleBooking from "./component/Booking/RescheduleBooking.js";
 import { Toaster } from "react-hot-toast";
-import AllMeeting from "./component/AllMeeting/AllMeeting.jsx";
+import AllMeeting from "./component/AllMeeting/AllMeeting.js";
 import PageNotFound from "./component/PageNotFound/PageNotFound.jsx";
 function App() {
   return (

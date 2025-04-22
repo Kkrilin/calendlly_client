@@ -1,11 +1,11 @@
 import { Avatar, Button } from "@mui/material";
-import CreateEventPopOver from "../Utils/PopOver/CreateEventPopOver.jsx";
+import CreateEventPopOver from "../Utils/PopOver/CreateEventPopOver.js";
 import { eventBaseUrl } from "../../api.js";
 import { header } from "../../api.js";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Loader from "../Loader/CircularLoader.jsx";
-import EventTypeCard from "./EventTypeCard.jsx";
+import Loader from "../Loader/CircularLoader.js";
+import EventTypeCard from "./EventTypeCard.js";
 import { useSelector } from "react-redux";
 import { config } from "../../config.js";
 import { useDispatch } from "react-redux";

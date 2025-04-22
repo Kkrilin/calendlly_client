@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import LeftSideBar from "../LeftSidebar/LeftSideBar.jsx";
-import ProfileHeader from "../ProfileHeader/ProfileHeader.jsx";
+import LeftSideBar from "../LeftSidebar/LeftSideBar.js";
+import ProfileHeader from "../ProfileHeader/ProfileHeader.js";
 import { Outlet } from "react-router-dom";
 import { availabilityBaseUrl, header } from "../../api.js";
-import SettingAvailabilty from "../Availability/SettingAvailabilty.jsx";
+import SettingAvailabilty from "../Availability/SettingAvailabilty.js";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Loader from "../Loader/CircularLoader.jsx";
+import Loader from "../Loader/CircularLoader.js";
 import toast from "react-hot-toast";
 
 function ProfileLayout() {

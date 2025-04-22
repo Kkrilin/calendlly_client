@@ -1,7 +1,7 @@
 import * as React from "react";
 import Popover from "@mui/material/Popover";
 import Button from "@mui/material/Button";
-import CreateEventType from "../../EventTypes/CreateEventType.jsx";
+import CreateEventType from "../../EventTypes/CreateEventType.js";
 
 export default function CreateEventPopOver({ children }) {
   const [anchorEl, setAnchorEl] = React.useState(null);

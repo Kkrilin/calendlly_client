@@ -1,9 +1,9 @@
 import * as React from "react";
 import Popover from "@mui/material/Popover";
 import Button from "@mui/material/Button";
-import EditProfile from "../../ProfileHeader/EditProfile.jsx";
+import EventCardSeeting from "../../EventTypes/EventCardSeeting.js";
 
-export default function LogoutPopOver({ children, eventType }) {
+export default function EventSettingPopOver({ children, eventType }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -39,7 +39,7 @@ export default function LogoutPopOver({ children, eventType }) {
           horizontal: "right",
         }}
       >
-        <EditProfile handleClose={handleClose} />
+        <EventCardSeeting eventType={eventType} handleClose={handleClose} />
       </Popover>
     </div>
   );
