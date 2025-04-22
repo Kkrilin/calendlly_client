@@ -1,73 +1,81 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { useGoogleLogin } from "@react-oauth/google";
+import { Link, useNavigate } from "react-router-dom";
+import { useGoogleLogin, CodeResponse, NonOAuthError } from "@react-oauth/google";
 import { config } from "../../config";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-hot-toast";
 import { setProfileData } from "../../redux/profileSlice";
 import { useDispatch } from "react-redux";
+import { GoogleAuthAxiosResponse, LoginResponse } from "../../constant"; // Make sure these types exist
+
+interface LoginPayload {
+  email: string;
+  password: string;
+}
 
 const serverBaseUrl = config.serverBaseUrl;
+
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const payload = {
+  const payload: LoginPayload = {
     email,
     password,
   };
 
   const loginUrl = `${serverBaseUrl}/auth/login`;
-  const handleLoginSubmit = async (e) => {
+
+  const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email || !password) {
-      setError("error in the signup");
+      setError("Email and password are required.");
       return;
     }
 
     if (password.length < 6) {
-      setError("error in the signup");
+      setError("Password must be at least 6 characters.");
       return;
     }
 
     try {
-      const loginRes = await axios.post(loginUrl, payload);
+      const loginRes: AxiosResponse<LoginResponse> = await axios.post<LoginResponse>(loginUrl, payload);
       localStorage.setItem("token", loginRes.data.token);
       dispatch(setProfileData({ data: loginRes.data.userData }));
       navigate("/user/event_type");
-    } catch (error) {
-      setError(error.message);
-      console.log(error);
-      toast.error(error.response.data.message);
+    } catch (err: unknown) {
+      const axiosErr = err as AxiosError<{ message: string }>;
+      const msg = axiosErr.response?.data?.message || "Login failed";
+      setError(msg);
+      toast.error(msg);
     }
   };
 
-  const navigate = useNavigate();
   const handleGoogleAuth = useGoogleLogin({
     flow: "auth-code",
-    scope:
-      "openid email profile https://www.googleapis.com/auth/calendar.events",
-    access_type: "offline",
-    prompt: "consent",
-    onSuccess: async ({ code }) => {
-      console.log("code", code);
+    scope: "openid email profile https://www.googleapis.com/auth/calendar.events",
+    onSuccess: async ({ code }: { code: string }) => {
       try {
-        const res = await axios.post(`${serverBaseUrl}/auth/google`, { code });
-        console.log("token", res.data.token);
+        const res: AxiosResponse<GoogleAuthAxiosResponse> = await axios.post(`${serverBaseUrl}/auth/google`, { code });
         localStorage.setItem("token", res.data.token);
         dispatch(setProfileData({ data: res.data.userData }));
         navigate("/user/event_type");
-      } catch (error) {
-        toast.error(error.response.data.message);
-
-        setError(error.message);
+      } catch (err: unknown) {
+        const axiosErr = err as AxiosError<{ message: string }>;
+        const msg = axiosErr.response?.data?.message || "Google login failed";
+        setError(msg);
+        toast.error(msg);
       }
     },
-    onError: (error) => setError(error.message),
-    onNonOAuthError: (error) => setError(error.message),
+    onError: (errorResponse: Pick<CodeResponse, "error" | "error_description" | "error_uri">) => {
+      setError(errorResponse.error_description || "OAuth error occurred");
+    },
+    onNonOAuthError: (nonOAuthError: NonOAuthError) => {
+      setError(nonOAuthError.type || "Non-OAuth error occurred");
+    },
   });
 
   return (
@@ -86,61 +94,32 @@ const LoginPage = () => {
           </h2>
           <form onSubmit={handleLoginSubmit} className="login_form">
             <div>
-              <label
-                htmlFor="email"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
+              <label htmlFor="email" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 Email
-                {error && !email && (
-                  <span className="error">enter the email</span>
-                )}
+                {error && !email && <span className="error">Enter your email</span>}
               </label>
               <input
                 id="email"
                 value={email}
-                onInput={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 type="email"
                 placeholder="Enter your email"
-              ></input>
+              />
             </div>
             <div>
-              <label
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-                htmlFor="password"
-              >
+              <label htmlFor="password" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 Password
-                {error && !password && (
-                  <span className="error">enter the password</span>
-                )}
-                {error && password.length < 6 && (
-                  <span className="error">password lenth is small</span>
-                )}
-                <span
-                  style={{
-                    color: "#372573",
-                    fontWeight: "300",
-                    fontSize: "0.875rem",
-                  }}
-                >
-                  6 character least
-                </span>
+                {error && !password && <span className="error">Enter your password</span>}
+                {error && password.length < 6 && <span className="error">Password length is too short</span>}
+                <span style={{ color: "#372573", fontWeight: "300", fontSize: "0.875rem" }}>6 characters minimum</span>
               </label>
-
               <input
                 id="password"
                 value={password}
-                onInput={(e) => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 type="password"
                 placeholder="Enter your password"
-              ></input>
+              />
             </div>
             <button
               className="google_button"
@@ -160,50 +139,22 @@ const LoginPage = () => {
             </button>
           </form>
           <div>
-            <div
-              style={{
-                width: "100%",
-                overflow: "hidden",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+            <div style={{ width: "100%", overflow: "hidden", display: "flex", justifyContent: "center", alignItems: "center" }}>
               <p className="before_after">OR</p>
             </div>
 
-            <button
-              onClick={handleGoogleAuth}
-              className="google_button"
-              style={{ margin: "20px auto" }}
-            >
+            <button onClick={handleGoogleAuth} className="google_button" style={{ margin: "20px auto" }}>
               <span>
-                <img src="https://calendly.com/media/googleLogo.svg" alt="" />
+                <img src="https://calendly.com/media/googleLogo.svg" alt="Google Logo" />
               </span>
-              <span
-                style={{
-                  fontSize: "1.2rem",
-                  marginRight: "15px",
-                  fontWeight: "500",
-                }}
-              >
-                Log In with Google
-              </span>
+              <span style={{ fontSize: "1.2rem", marginRight: "15px", fontWeight: "500" }}>Log In with Google</span>
             </button>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "10px",
-              }}
-            >
+
+            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "10px" }}>
               <span>Don't have an account?</span>
-              <span>
-                <Link to="/signup" style={{ color: "blue" }}>
-                  Sign up for free
-                </Link>
-              </span>
+              <Link to="/signup" style={{ color: "blue" }}>
+                Sign up for free
+              </Link>
             </div>
           </div>
         </div>

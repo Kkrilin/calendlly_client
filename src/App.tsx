@@ -3,10 +3,10 @@ import LandingPage from "./component/Pages/LandingPage";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./component/Pages/LoginPage";
 import SignupPage from "./component/Pages/SignupPage";
-import Header from "./component/Header/Header";
-import Footer from "./component/Footer/Footer";
-import HomePage from "./component/Pages/HomePage";
-import EditProfilePage from "./component/Pages/EditProfilePage.js";
+import Header from "@/component/Header/Header";
+import Footer from "@/component/Footer/Footer";
+import HomePage from "@/component/Pages/HomePage";
+import EditProfilePage from "./component/Pages/EditProfilePage";
 import LandingLaylout from "./component/Layout/LandingLayout";
 import ProfileLayout from "./component/Layout/ProfileLayout";
 import EventTypes from "./component/EventTypes/EventTypes";
@@ -14,10 +14,12 @@ import Availability from "./component/Availability/Availability";
 import SettingAvailabilty from "./component/Availability/SettingAvailabilty";
 import OneEvent from "./component/Booking/OneEvent";
 import AllEvent from "./component/Booking/AllEvent";
-import RescheduleBooking from "./component/Booking/RescheduleBooking.js";
+import RescheduleBooking from "./component/Booking/RescheduleBooking";
 import { Toaster } from "react-hot-toast";
-import AllMeeting from "./component/AllMeeting/AllMeeting.js";
-import PageNotFound from "./component/PageNotFound/PageNotFound.jsx";
+import AllMeeting from "./component/AllMeeting/AllMeeting";
+import PageNotFound from "./component/PageNotFound/PageNotFound";
+
+
 function App() {
   return (
     <BrowserRouter>

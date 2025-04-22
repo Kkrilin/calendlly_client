@@ -7,13 +7,18 @@ import { availabilityBaseUrl, header } from "../../api";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { ActiveStatus, AvailabilityPayload, DayOfWeek } from "@/constant";
 
 const SettingAvailabilty = () => {
-  const [availabilities, setAvailabilities] = useState([]);
-  const token = localStorage.getItem("token");
-  const [availabilityError, setAvailablityError] = useState(false);
-  header.headers.Authorization = `Bearer ${token}`;
+  const [availabilities, setAvailabilities] = useState<AvailabilityPayload[]>([]);
+  const token: string | null = localStorage.getItem("token");
+  const [availabilityError, setAvailablityError] = useState<boolean>(false);
   const navigate = useNavigate();
+
+  if (token && header.headers) {
+    header.headers.Authorization = `Bearer ${token}`;
+  }
+
   const handleSubmit = () => {
     if (availabilityError) {
       toast.error("availabilty is not correct");
@@ -74,11 +79,17 @@ const SettingAvailabilty = () => {
   );
 };
 
-const WeekDay = ({ week, setAvailabilities, setAvailablityError }) => {
-  const [startTime, setStartTime] = useState("09:00 am");
-  const [endTime, setEndTime] = useState("05:00 pm");
-  const [checked, setChecked] = useState(false);
-  const [error, setError] = useState("");
+interface WeekDayProps {
+  week: DayOfWeek;
+  setAvailabilities: React.Dispatch<React.SetStateAction<AvailabilityPayload[]>>;
+  setAvailablityError: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const WeekDay = ({ week, setAvailabilities, setAvailablityError }: WeekDayProps) => {
+  const [startTime, setStartTime] = useState<string>("09:00 am");
+  const [endTime, setEndTime] = useState<string>("05:00 pm");
+  const [checked, setChecked] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   useEffect(() => {
     if (setAvailabilities && !setAvailabilities.length) {
       setAvailabilities((preState) => {
@@ -86,7 +97,7 @@ const WeekDay = ({ week, setAvailabilities, setAvailablityError }) => {
           dayOfWeek: week,
           startTime,
           endTime,
-          active: checked ? 1 : 0,
+          active: checked ? ActiveStatus.ACTIVE : ActiveStatus.INACTIVE,
         };
         return [...preState, availability];
       });
@@ -97,7 +108,7 @@ const WeekDay = ({ week, setAvailabilities, setAvailablityError }) => {
           dayOfWeek: week,
           startTime,
           endTime,
-          active: checked ? 1 : 0,
+          active: checked ? ActiveStatus.ACTIVE : ActiveStatus.INACTIVE,
         };
         return [...filterState, availability];
       });
@@ -124,7 +135,7 @@ const WeekDay = ({ week, setAvailabilities, setAvailablityError }) => {
               width: "25px",
               height: "25px",
             }}
-            // value={week}
+          // value={week}
           />
           {week.toUpperCase()}
         </label>

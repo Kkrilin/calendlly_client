@@ -1,52 +1,66 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { config } from "../../config";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
-import { useGoogleLogin } from "@react-oauth/google";
+import { CodeResponse, NonOAuthError, useGoogleLogin } from "@react-oauth/google";
 import { setProfileData } from "../../redux/profileSlice";
 import { useDispatch } from "react-redux";
 
 import { toast } from "react-hot-toast";
+import { GoogleAuthAxiosResponse, SignupResponse } from "@/constant";
 const { serverBaseUrl } = config;
 
+
+interface SignupPayload {
+  name: string;
+  email: string;
+  password: string;
+}
+
 const SignupPage = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
+
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
-  const payload = {
+  const payload: SignupPayload = {
     name,
     email,
     password,
   };
+
+  const validateFields = ({ name, email, password }: SignupPayload): string | null => {
+    if (!name || !email || !password) return "All fields are required";
+    if (password.length < 6) return "Password must be at least 6 characters";
+    return null;
+  };
   const signUpUrl = `${serverBaseUrl}/auth/signup`;
 
-  const handleSignUpSubmit = async (e) => {
+  const handleSignUpSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!name || !email || !password) {
-      setError("error in the signup");
-      return;
-    }
-
-    if (password.length < 6) {
-      setError("error in the signup");
+    const errorMsg = validateFields(payload);
+    if (errorMsg) {
+      setError(errorMsg);
       return;
     }
 
     try {
-      const signUpRes = await axios.post(signUpUrl, payload);
+      const signUpRes: AxiosResponse<SignupResponse> = await axios.post<SignupResponse>(signUpUrl, payload);
       localStorage.setItem("token", signUpRes.data.token);
       dispatch(setProfileData({ data: signUpRes.data.userData }));
       navigate("/user/event_type");
-    } catch (error) {
-      setError(error.response?.data?.message);
-      toast.error(error.response?.data?.message);
-      console.log(error.response?.data?.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        setError(error.response?.data?.message || "Signup failed");
+        toast.error(error.response?.data?.message || "Signup failed");
+      } else {
+        setError("Unexpected error occurred");
+      }
     }
   };
 
@@ -54,24 +68,30 @@ const SignupPage = () => {
     flow: "auth-code",
     scope:
       "openid email profile https://www.googleapis.com/auth/calendar.events",
-    access_type: "offline",
-    prompt: "consent",
-    onSuccess: async ({ code }) => {
+    onSuccess: async ({ code }: { code: string }) => {
       console.log("code", code);
       try {
-        const res = await axios.post(`${serverBaseUrl}/auth/google`, { code });
-        console.log("token", res.data.token);
+        const res: AxiosResponse<GoogleAuthAxiosResponse> = await axios.post<GoogleAuthAxiosResponse>(`${serverBaseUrl}/auth/google`, { code });
         localStorage.setItem("token", res.data.token);
         dispatch(setProfileData({ data: res.data.userData }));
         navigate("/user/event_type");
       } catch (error) {
-        toast.error(error.response.data.message);
-
-        setError(error.message);
+        if (axios.isAxiosError(error)) {
+          toast.error(error.response?.data?.message || "Something went wrong");
+          setError(error.message);
+        } else {
+          setError("Unexpected error occurred");
+        }
       }
     },
-    onError: (error) => setError(error.message),
-    onNonOAuthError: (error) => setError(error.message),
+    onError: (errorResponse: Pick<CodeResponse, "error" | "error_description" | "error_uri">) => {
+      setError(errorResponse.error_description || "OAuth error occurred");
+    },
+
+    onNonOAuthError: (nonOAuthError: NonOAuthError) => {
+      setError(nonOAuthError.type || "Non-OAuth error occurred");
+    },
+
   });
 
   return (
@@ -88,7 +108,7 @@ const SignupPage = () => {
           >
             Sign up for your Calendlly account
           </h2>
-          <form onSubmit={handleSignUpSubmit} className="signup_form">
+          <form onSubmit={(e) => handleSignUpSubmit(e)} className="signup_form">
             <div>
               <label
                 htmlFor="name"
@@ -106,7 +126,7 @@ const SignupPage = () => {
               <input
                 id="name"
                 value={name}
-                onInput={(e) => setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
                 type="text"
                 placeholder="Enter your name"
               ></input>
@@ -128,7 +148,7 @@ const SignupPage = () => {
               <input
                 id="email"
                 value={email}
-                onInput={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 type="email"
                 placeholder="Enter your email"
               ></input>
@@ -163,7 +183,7 @@ const SignupPage = () => {
               <input
                 id="password"
                 value={password}
-                onInput={(e) => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 type="password"
                 placeholder="Enter your password"
               ></input>

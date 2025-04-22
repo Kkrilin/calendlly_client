@@ -48,7 +48,7 @@ const BookEvent = ({
     if (reschedule && !rescheduleReason) {
       setError("can't be blank");
       return;
-    } else if (!reschedule &&(!guestName || !guestEmail)) {
+    } else if (!reschedule && (!guestName || !guestEmail)) {
       setError("can't be blank");
       return;
     }
@@ -76,12 +76,12 @@ const BookEvent = ({
             <>
               <h3>reshcedule reason</h3>
               <textarea
-                onInput={(e) => setRescheduleReason(e.target.value)}
+                onChange={(e) => setRescheduleReason(e.target.value)}
                 value={rescheduleReason}
                 name="reason"
                 id="reason"
-                rows="4"
-                cols="30"
+                rows={4}
+                cols={30}
               ></textarea>
             </>
           ) : (
@@ -101,7 +101,7 @@ const BookEvent = ({
                   type="text"
                   id="name"
                   value={guestName}
-                  onInput={(e) => setGuestName(e.target.value)}
+                  onChange={(e) => setGuestName(e.target.value)}
                   style={{
                     height: "2.5rem",
                     borderRadius: "6px",
@@ -156,7 +156,7 @@ function SimpleBackdrop({ children, handleOpen, open, HandleBooking }) {
       <Backdrop
         sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
         open={open}
-        // onClick={handleClose}
+      // onClick={handleClose}
       >
         <CircularProgress color="inherit" />
       </Backdrop>

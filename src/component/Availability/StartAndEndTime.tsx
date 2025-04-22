@@ -1,23 +1,29 @@
 import { useEffect, useState } from "react";
 import { generateTimeOptions, toSeconds } from "../../utils";
-
-const timeOptions = generateTimeOptions(15, 12);
-import HoursDropDown from "../Utils/HoursDropDown";
-import axios from "axios";
 import { availabilityBaseUrl, header } from "../../api";
 import toast from "react-hot-toast";
-const StartAndEndTime = ({
-  setStartTime,
-  setEndTime,
-  startTime,
-  endTime,
-  checked,
-  avail,
-  setError,
-  error,
-  setAvailablityError,
-}) => {
-  const checkError = (startTime, endTime) => {
+import axios from "axios";
+import { ActiveStatus, AvailabilityResponse } from "@/constant";
+
+const timeOptions = generateTimeOptions(15, 12);
+
+export interface StartAndEndTimeProps {
+  startTime: string;
+  endTime: string;
+  setStartTime: React.Dispatch<React.SetStateAction<string>>;
+  setEndTime: React.Dispatch<React.SetStateAction<string>>;
+  error: string;
+  setError: React.Dispatch<React.SetStateAction<string>>;
+  setAvailablityError?: React.Dispatch<React.SetStateAction<boolean>>;
+  checked?: boolean
+  avail?: AvailabilityResponse
+}
+
+
+
+const StartAndEndTime = ({ setStartTime, setEndTime, startTime, endTime, checked, avail, setError, error, setAvailablityError }: StartAndEndTimeProps) => {
+
+  const checkError = (startTime: string, endTime: string): boolean => {
     if (toSeconds(startTime) > toSeconds(endTime)) {
       if (setAvailablityError) {
         setAvailablityError(true);
@@ -53,21 +59,23 @@ const StartAndEndTime = ({
   }, []);
 
   const token = localStorage.getItem("token");
-  header.headers.Authorization = `Bearer ${token}`;
+  if (token && header.headers) {
+    header.headers.Authorization = `Bearer ${token}`;
+  }
 
-  const handleStartTimeChange = (e) => {
+  const handleStartTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setStartTime(e.target.value);
     if (checkError(e.target.value, endTime)) {
       return;
     }
 
     const payload = {
-      active: checked ? 1 : 0,
+      active: checked ? ActiveStatus.ACTIVE : ActiveStatus.INACTIVE,
       startTime: e.target.value,
       endTime,
     };
     axios
-      .put(`${availabilityBaseUrl}/${avail.id}`, payload, header)
+      .put(`${availabilityBaseUrl}/${avail?.id}`, payload, header)
       .then((res) => {
         toast.success("changes saved");
       })
@@ -76,19 +84,19 @@ const StartAndEndTime = ({
       });
   };
 
-  const handleEndTimeChange = (e) => {
+  const handleEndTimeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setEndTime(e.target.value);
     if (checkError(startTime, e.target.value)) {
       return;
     }
     const payload = {
-      active: checked ? 1 : 0,
+      active: checked ? ActiveStatus.ACTIVE : ActiveStatus.INACTIVE,
       startTime,
       endTime: e.target.value,
     };
 
     axios
-      .put(`${availabilityBaseUrl}/${avail.id}`, payload, header)
+      .put(`${availabilityBaseUrl}/${avail?.id}`, payload, header)
       .then((res) => {
         toast.success("changes saved");
       })
@@ -96,6 +104,7 @@ const StartAndEndTime = ({
         toast.error(error.messages);
       });
   };
+
   return (
     <div>
       <div style={{ display: "flex", alignItems: "center" }}>

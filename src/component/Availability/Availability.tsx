@@ -3,21 +3,25 @@ import { dayOfWeeks } from "../../utils";
 import { useEffect, useState } from "react";
 import WeekDay from "./WeekDay";
 import { availabilityBaseUrl, header } from "../../api";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { AvailabilityResponse } from "@/constant";
+import toast from "react-hot-toast";
 
 const Availability = () => {
-  const [availabilities, setAvailabilities] = useState([]);
+  const [availabilities, setAvailabilities] = useState<AvailabilityResponse[]>([]);
 
   const token = localStorage.getItem("token");
-  header.headers.Authorization = `Bearer ${token}`;
+  if (token && header.headers) {
+    header.headers.Authorization = `Bearer ${token}`;
+  }
   useEffect(() => {
     axios
-      .get(availabilityBaseUrl, header)
-      .then((res) => {
+      .get<{ sucess: 1 | 0, availability: AvailabilityResponse[] }>(availabilityBaseUrl, header)
+      .then((res: AxiosResponse<{ sucess: 1 | 0, availability: AvailabilityResponse[] }>) => {
         console.log("res.data.availability", res.data.availability);
         setAvailabilities(res.data.availability);
       })
-      .catch((error) => console.log(error));
+      .catch((error: AxiosError) => toast.error(error.message));
   }, []);
 
   return (

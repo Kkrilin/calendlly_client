@@ -1,16 +1,17 @@
 import { Link } from "react-router-dom";
-import { useGoogleLogin } from "@react-oauth/google";
+import { CodeResponse, NonOAuthError, useGoogleLogin } from "@react-oauth/google";
 import { config } from "../../config";
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { setProfileData } from "../../redux/profileSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
+import { GoogleAuthAxiosResponse } from "@/constant";
 const serverBaseUrl = config.serverBaseUrl;
 
 const LandingPage = () => {
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string>("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -18,24 +19,30 @@ const LandingPage = () => {
     flow: "auth-code",
     scope:
       "openid email profile https://www.googleapis.com/auth/calendar.events",
-    access_type: "offline",
-    prompt: "consent",
-    onSuccess: async ({ code }) => {
+    onSuccess: async ({ code }: { code: string }) => {
       console.log("code", code);
       try {
-        const res = await axios.post(`${serverBaseUrl}/auth/google`, { code });
-        console.log("token", res.data.token);
+        const res: AxiosResponse<GoogleAuthAxiosResponse> = await axios.post<GoogleAuthAxiosResponse>(`${serverBaseUrl}/auth/google`, { code });
         localStorage.setItem("token", res.data.token);
         dispatch(setProfileData({ data: res.data.userData }));
         navigate("/user/event_type");
       } catch (error) {
-        toast.error(error.response.data.message);
-
-        setError(error.message);
+        if (axios.isAxiosError(error)) {
+          toast.error(error.response?.data?.message || "Something went wrong");
+          setError(error.message);
+        } else {
+          setError("Unexpected error occurred");
+        }
       }
     },
-    onError: (error) => setError(error.message),
-    onNonOAuthError: (error) => setError(error.message),
+    onError: (errorResponse: Pick<CodeResponse, "error" | "error_description" | "error_uri">) => {
+      setError(errorResponse.error_description || "OAuth error occurred");
+    },
+
+    onNonOAuthError: (nonOAuthError: NonOAuthError) => {
+      setError(nonOAuthError.type || "Non-OAuth error occurred");
+    },
+
   });
   return (
     <section className="landing_page">

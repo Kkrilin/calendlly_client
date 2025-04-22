@@ -5,20 +5,28 @@ import { availabilityBaseUrl, header } from "../../api";
 import axios from "axios";
 import toast from "react-hot-toast";
 import moment from "moment";
+import { AvailabilityResponse } from "@/constant";
 
-const WeekDay = ({ avail }) => {
+interface WeekDayProps {
+  avail: AvailabilityResponse
+}
+
+
+const WeekDay = ({ avail }: WeekDayProps) => {
   const [startTime, setStartTime] = useState("09:00 am");
   const [endTime, setEndTime] = useState("05:00 pm");
   const [checked, setChecked] = useState(false);
   const [error, setError] = useState("");
   const token = localStorage.getItem("token");
-  header.headers.Authorization = `Bearer ${token}`;
+  if (header.headers) {
+    header.headers.Authorization = `Bearer ${token}`;
+  }
 
   useEffect(() => {
     console.log(avail, "availabiliteis");
     console.log("avail?.start_time", avail?.start_time);
-    const [startHours, startMinute] = avail?.start_time?.split(":");
-    const [endHours, endMinute] = avail?.end_time?.split(":");
+    const [startHours, startMinute] = (avail.start_time ?? "09:00 am").split(':').map(s => parseInt(s));
+    const [endHours, endMinute] = (avail?.end_time ?? "05:00 pm")?.split(":").map(s => parseInt(s));
 
     const startTime = new Date(
       0,
@@ -44,7 +52,7 @@ const WeekDay = ({ avail }) => {
     setChecked(!!avail.active);
   }, []);
 
-  const handleChecked = (e) => {
+  const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
     const payload = {
       active: e.target.checked ? 1 : 0,
     };
@@ -81,7 +89,7 @@ const WeekDay = ({ avail }) => {
             }}
             checked={checked}
           />
-          {dayOfWeeks[avail.day_of_week].toUpperCase()}
+          {dayOfWeeks[String(avail.day_of_week) as keyof typeof dayOfWeeks].toUpperCase()}
         </label>
       </div>
       {checked && (

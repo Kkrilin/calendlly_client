@@ -1,6 +1,7 @@
 import moment from "moment";
-export const generateTimeOptions = (interval = 15, format = 12) => {
-  const times = [];
+import { DayOfWeek } from "./constant";
+export const generateTimeOptions = (interval : number = 15, format : number = 12) => {
+  const times : string[] = [];
   const totalMinutesInDay = 24 * 60;
 
   for (let minutes = 0; minutes < totalMinutesInDay; minutes += interval) {
@@ -24,17 +25,27 @@ export const toSeconds = (timeStr) => {
   return time.hours() * 3600 + time.minutes() * 60;
 };
 
-export const weekDays = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+export const weekDays: DayOfWeek[] = [
+  DayOfWeek.SUN,
+  DayOfWeek.MON,
+  DayOfWeek.TUE,
+  DayOfWeek.WED,
+  DayOfWeek.THU,
+  DayOfWeek.FRI,
+  DayOfWeek.SAT,
+];
+
 
 export const dayOfWeeks = {
-  0: "sun",
-  1: "mon",
-  2: "tue",
-  3: "wed",
-  4: "thu",
-  5: "fri",
-  6: "sat",
+  "0": "sun",
+  "1": "mon",
+  "2": "tue",
+  "3": "wed",
+  "4": "thu",
+  "5": "fri",
+  "6": "sat",
 };
+
 
 export function getTimeSlots(startTime, endTime, meetingDuration) {
   const slots = [];
