@@ -1,8 +1,17 @@
+import { AvailabilityResponse } from "@/constant";
 import React, { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
-function MyCalendar({ date, setDate, availabilities, setTimeSlots }) {
+
+interface MyCalendarProps {
+  date: Date | null;
+  setDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  availabilities: AvailabilityResponse[];
+  setTimeSlots: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+function MyCalendar({ date, setDate, availabilities, setTimeSlots }: MyCalendarProps) {
   const today = new Date();
 
   const disabledDate = new Set();
@@ -12,15 +21,15 @@ function MyCalendar({ date, setDate, availabilities, setTimeSlots }) {
     }
   });
 
-  const disableNonAvailableDays = ({ date }) => {
-    const nonAvailableDays = disabledDate.has(date.getDay());
+  const disableNonAvailableDays = () => {
+    const nonAvailableDays = disabledDate.has(date && date.getDay());
     return nonAvailableDays;
   };
 
   return (
     <div>
       <Calendar
-        onChange={setDate}
+        onChange={(value) => setDate(value as Date)}
         value={date}
         minDate={today}
         tileDisabled={disableNonAvailableDays}

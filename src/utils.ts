@@ -20,7 +20,7 @@ export const generateTimeOptions = (interval : number = 15, format : number = 12
   return times;
 };
 
-export const toSeconds = (timeStr) => {
+export const toSeconds = (timeStr:string) => {
   const time = moment(timeStr, ["h:mm A"]); // e.g "09:00 AM"
   return time.hours() * 3600 + time.minutes() * 60;
 };
@@ -47,7 +47,7 @@ export const dayOfWeeks = {
 };
 
 
-export function getTimeSlots(startTime, endTime, meetingDuration) {
+export function getTimeSlots(startTime: string, endTime: string, meetingDuration: number) {
   const slots = [];
 
   // Convert "HH:mm:ss" to a Date object for today
@@ -72,7 +72,7 @@ export function getTimeSlots(startTime, endTime, meetingDuration) {
   return slots;
 }
 
-export function format12Hour(date) {
+export function format12Hour(date: Date) {
   const istDate = new Date(
     date.toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
   );

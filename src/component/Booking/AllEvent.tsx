@@ -7,24 +7,26 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { config } from "../../config";
+import { EventTypeResponse } from "@/constant";
 
 const clientBaseUrl = config.clientBaseUrl;
 
 const AllEvent = () => {
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [events, setEvents] = useState<EventTypeResponse[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const params = useParams();
   const { userId } = params;
+
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`${eventLookUpUrl}/${userId}`, header)
+      .get<{ suuccess: 1, eventTypes: EventTypeResponse[] }>(`${eventLookUpUrl}/${userId}`, header)
       .then((res) => {
         setEvents(res.data.eventTypes);
       })
       .catch((error) => toast.error("Something went wrong"))
       .finally(() => {
-        setTimeout(() => setLoading(false), 0);
+        setLoading(false);
       });
   }, []);
 
@@ -52,7 +54,7 @@ const AllEvent = () => {
         >
           {events.length &&
             events.map((et) => (
-              <EventTypeCard eventType={et} key={et.id} public />
+              <EventTypeCard eventType={et} key={et.id} />
             ))}
           {!events.length && <h3>there is no event</h3>}
         </div>
@@ -61,7 +63,11 @@ const AllEvent = () => {
   );
 };
 
-const EventTypeCard = ({ eventType }) => {
+interface EventTypeCardProps {
+  eventType: EventTypeResponse;
+}
+
+const EventTypeCard = ({ eventType }: EventTypeCardProps) => {
   const handleCopy = () => {
     const url = `${clientBaseUrl}/book/event/${eventType.userId}/${eventType.id}`;
     navigator.clipboard

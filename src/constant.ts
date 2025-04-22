@@ -74,5 +74,30 @@ export interface EventTypeResponse {
   createdAt: string;
   updatedAt: string;
   deletedAt?: string | null;
+  User?: BaseUserData
   // location?: string; // Uncomment if location is added later
 }
+
+
+
+export interface MeetingData {
+  id: string;
+  guest_name: string;
+  guest_email: string;
+  start_time: string; // ISO format string
+  end_time: string;   // ISO format string
+  reminderSent: boolean;
+  isReschedule: boolean;
+  rescheduleBy?: string;
+  rescheduleReason?: string;
+  googleEventId?: string;
+  userId: string;
+  eventTypeId: string;
+  EventType?: EventTypeResponse;
+  User?: BaseUserData;
+}
+
+
+export type GroupedMeetings = {
+  [date: string]: MeetingData[];
+};

@@ -3,16 +3,19 @@ import Popover from "@mui/material/Popover";
 import Button from "@mui/material/Button";
 import BookEvent from "../../Booking/BookEvent";
 
-export default function BookEventPopOver({
-  children,
-  bookTime,
-  bookDate,
-  setBookingResponse,
-  reschedule,
-}) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleClick = (event) => {
+interface BookEventPopOverProps {
+  children: React.ReactNode;
+  bookTime: string;
+  bookDate: string;
+  setBookingResponse: React.Dispatch<React.SetStateAction<any>>;
+  reschedule?: boolean;
+}
+
+export default function BookEventPopOver({ children, bookTime, bookDate, setBookingResponse, reschedule }: BookEventPopOverProps) {
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -28,8 +31,7 @@ export default function BookEventPopOver({
       <span
         className="next"
         aria-describedby={id}
-        variant="contained"
-        onClick={handleClick}
+        onClick={e => handleClick}
       >
         {children}
       </span>

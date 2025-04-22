@@ -5,7 +5,11 @@ import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
-const EventCardSeeting = ({ handleClose }) => {
+interface EventCardSeetingProps {
+  handleClose: () => void;
+}
+
+const EventCardSeeting = ({ handleClose }: EventCardSeetingProps) => {
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.clear();

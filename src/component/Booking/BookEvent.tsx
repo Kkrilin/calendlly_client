@@ -7,6 +7,24 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { MeetingData } from "@/constant";
+
+interface BookEventProps {
+  handleClose: () => void;
+  bookTime: string;
+  bookDate: string;
+  setBookingResponse: React.Dispatch<React.SetStateAction<any>>;
+  reschedule?: boolean;
+}
+
+export interface BookEventPayload {
+  bookDate: string;
+  bookTime: string;
+  guestName?: string;
+  guestEmail?: string;
+  rescheduleReason?: string;
+}
+
 
 const BookEvent = ({
   handleClose,
@@ -14,21 +32,21 @@ const BookEvent = ({
   bookDate,
   setBookingResponse,
   reschedule,
-}) => {
-  const [guestName, setGuestName] = useState("");
-  const [guestEmail, setGuestEmail] = useState("");
-  const [rescheduleReason, setRescheduleReason] = useState("");
-  const [error, setError] = useState("");
-  const [open, setOpen] = React.useState(false);
+}: BookEventProps) => {
+  const [guestName, setGuestName] = useState<string>("");
+  const [guestEmail, setGuestEmail] = useState<string>("");
+  const [rescheduleReason, setRescheduleReason] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
   const handleCloseBackDrop = () => {
     setOpen(false);
   };
   const handleOpen = () => {
     setOpen(true);
   };
-  const params = useParams();
+  const params = useParams<{ userId: string, eventId: string, bookingId: string }>();
   const { userId, eventId, bookingId } = params;
-  const payload = {
+  const payload: BookEventPayload = {
     bookDate,
     bookTime,
   };
@@ -54,10 +72,10 @@ const BookEvent = ({
     }
     handleOpen();
     axios
-      .post(url, payload, header)
+      .post<{ success: 1, booking: MeetingData }>(url, payload, header)
       .then((res) => {
         console.log(res.data);
-        setBookingResponse(res.data);
+        setBookingResponse(res.data.booking);
       })
       .catch((error) => {
         toast.error(`Booking failed with error : ${error.message}`);
@@ -126,7 +144,7 @@ const BookEvent = ({
                   type="email"
                   id="name"
                   value={guestEmail}
-                  onInput={(e) => setGuestEmail(e.target.value)}
+                  onChange={(e) => setGuestEmail(e.target.value)}
                   style={{
                     height: "2.5rem",
                     borderRadius: "6px",
@@ -147,7 +165,14 @@ const BookEvent = ({
   );
 };
 
-function SimpleBackdrop({ children, handleOpen, open, HandleBooking }) {
+
+interface SimpleBackdropProps {
+  children: React.ReactNode;
+  open: boolean;
+  HandleBooking: () => void;
+}
+
+function SimpleBackdrop({ children, open, HandleBooking }: SimpleBackdropProps) {
   return (
     <div>
       <Button onClick={HandleBooking} variant="contained">

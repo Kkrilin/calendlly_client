@@ -9,20 +9,22 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setProfileData } from "../../redux/profileSlice";
 import toast from "react-hot-toast";
-
+import { RootState } from "@/redux/store";
 const EditProfilePage = () => {
-  const { data } = useSelector((state) => state.profile);
+  const { data } = useSelector((state: RootState) => state.profile);
   const [edit, setEdit] = useState(false);
-  const [field, setField] = useState("");
-  const [formData, setFormData] = useState({
+  const [field, setField] = useState<string | undefined>("");
+  const [formData, setFormData] = useState<{ name: string, email: string }>({
     name: data.name,
     email: data.email,
   });
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
-  header.headers.Authorization = `Bearer ${token}`;
+  if (header.headers) {
+    header.headers.Authorization = `Bearer ${token}`;
+  }
 
-  const handleClick = (e) => {
+  const handleClick = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     const fieldName = e.currentTarget.dataset.field;
     if (edit && field === fieldName) {
       axios
@@ -32,13 +34,13 @@ const EditProfilePage = () => {
           toast.success("changes saved");
         })
         .catch((error) => toast.error("something wen wrong"));
-      console.log("Saving changes:", formData[fieldName]);
+      // console.log("Saving changes:", formData[fieldName]);
     }
     setEdit((prevState) => !prevState);
     setField(fieldName);
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -83,13 +85,13 @@ const EditProfilePage = () => {
                 <input
                   name="name"
                   value={formData.name}
-                  onChange={handleInputChange}
+                  onChange={e => handleInputChange}
                   style={{
                     width: "16rem",
                     height: "2rem",
                     borderRadius: "6px",
                     border: "1px solid grey",
-                    fontSize:"0.875rem"
+                    fontSize: "0.875rem"
                   }}
                 />
               ) : (
@@ -132,7 +134,7 @@ const EditProfilePage = () => {
                     height: "2rem",
                     borderRadius: "6px",
                     border: "1px solid grey",
-                    fontSize:"0.875rem"
+                    fontSize: "0.875rem"
 
                   }}
                 />

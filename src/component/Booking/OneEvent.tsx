@@ -14,21 +14,23 @@ import moment from "moment";
 
 import { Stack } from "@mui/material";
 import BookEventPopOver from "../Utils/PopOver/BookEventPopOver";
+import { AvailabilityResponse, EventTypeResponse, MeetingData } from "@/constant";
 
 const OneEvent = () => {
-  const [availabilities, setAvailabilities] = useState([]);
-  const [eventType, setEventType] = useState({});
-  const [date, setDate] = useState(new Date());
-  const [bookTime, setBookTime] = useState("");
-  const [timeSlots, setTimeSlots] = useState([]);
-  const [duration, setDuration] = useState([]);
-  const [bookingResponse, setBookingResponse] = useState(null);
-  const params = useParams();
+  const [availabilities, setAvailabilities] = useState<AvailabilityResponse[]>([]);
+  const [eventType, setEventType] = useState<EventTypeResponse>({} as EventTypeResponse);
+  const [date, setDate] = useState<Date | null>(new Date());
+  const [bookTime, setBookTime] = useState<string>("");
+  const [timeSlots, setTimeSlots] = useState<string[]>([]);
+  const [bookingResponse, setBookingResponse] = useState<MeetingData | null>(null);
+  const params = useParams<{ userId: string; eventId: string }>();
   const token = localStorage.getItem("token");
   useEffect(() => {
-    header.headers.Authorization = `Bearer ${token}`;
+    if (header.headers) {
+      header.headers.Authorization = `Bearer ${token}`;
+    }
     axios
-      .get(availabilityBaseUrl, header)
+      .get<{ success: 1, availability: AvailabilityResponse[] }>(availabilityBaseUrl, header)
       .then((res) => {
         console.log("res.data.availability", res.data.availability);
         setAvailabilities(res.data.availability);
@@ -38,7 +40,7 @@ const OneEvent = () => {
 
   useEffect(() => {
     axios
-      .get(`${eventLookUpUrl}/${params.userId}/${params.eventId}`, header)
+      .get<{ success: 1, eventType: EventTypeResponse }>(`${eventLookUpUrl}/${params.userId}/${params.eventId}`, header)
       .then((res) => {
         setEventType(res.data.eventType);
       })
@@ -52,7 +54,7 @@ const OneEvent = () => {
         meetingDate: date,
       };
       axios
-        .get(`${getTimeSlotsUrl}/${params.userId}/${params.eventId}`, header)
+        .get<{ success: 1, timeSlots: string[] }>(`${getTimeSlotsUrl}/${params.userId}/${params.eventId}`, header)
         .then((res) => {
           setTimeSlots(res.data.timeSlots);
         })
@@ -183,13 +185,15 @@ const OneEvent = () => {
   );
 };
 
-const Time = ({
-  timeSlot,
-  bookTime,
-  setBookTime,
-  date,
-  setBookingResponse,
-}) => {
+export interface TimeSlotProps {
+  timeSlot: string;
+  bookTime: string;
+  setBookTime: React.Dispatch<React.SetStateAction<string>>;
+  date: string;
+  setBookingResponse: React.Dispatch<React.SetStateAction<MeetingData | null>>;
+}
+
+const Time = ({ timeSlot, bookTime, setBookTime, date, setBookingResponse }: TimeSlotProps) => {
   return (
     <div
       style={{
@@ -206,7 +210,7 @@ const Time = ({
           width: `${bookTime === timeSlot ? "6.5rem" : "14rem"}`,
           color: `${bookTime === timeSlot ? "white" : "#0066e6"}`,
         }}
-        onClick={(e) => setBookTime(e.target.innerText)}
+        onClick={(e) => setBookTime(e.currentTarget.innerText)}
       >
         {timeSlot}
       </span>

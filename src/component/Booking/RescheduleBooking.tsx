@@ -14,23 +14,26 @@ import toast from "react-hot-toast";
 import moment from "moment-timezone";
 import BookEventPopOver from "../Utils/PopOver/BookEventPopOver";
 import { format12Hour } from "../../utils";
+import { AvailabilityResponse, MeetingData } from "@/constant";
 
 const RescheduleBooking = () => {
-  const [availabilities, setAvailabilities] = useState([]);
-  const [booking, setBooking] = useState({});
-  const [date, setDate] = useState();
-  const [bookTime, setBookTime] = useState("");
-  const [timeSlots, setTimeSlots] = useState([]);
-  const [duration, setDuration] = useState([]);
-  const [bookingResponse, setBookingResponse] = useState(null);
+  const [availabilities, setAvailabilities] = useState<AvailabilityResponse[]>([]);
+  const [booking, setBooking] = useState<MeetingData>({} as MeetingData);
+  const [date, setDate] = useState<Date | null>(null);
+  const [bookTime, setBookTime] = useState<string>("");
+  const [timeSlots, setTimeSlots] = useState<string[]>([]);
+  const [duration, setDuration] = useState<number>();
+  const [bookingResponse, setBookingResponse] = useState<MeetingData | null>(null);
   const timeZone = "Asia/Kolkata";
-  const params = useParams();
+  const params = useParams<{ bookingId: string }>();
   const formerTimeSlot = format12Hour(new Date(booking.start_time));
   const token = localStorage.getItem("token");
   useEffect(() => {
-    header.headers.Authorization = `Bearer ${token}`;
+    if (header.headers) {
+      header.headers.Authorization = `Bearer ${token}`;
+    }
     axios
-      .get(availabilityBaseUrl, header)
+      .get<{ success: 1, availability: AvailabilityResponse[] }>(availabilityBaseUrl, header)
       .then((res) => {
         console.log("res.data.availability", res.data.availability);
         setAvailabilities(res.data.availability);
@@ -40,7 +43,7 @@ const RescheduleBooking = () => {
 
   useEffect(() => {
     axios
-      .get(`${resheduleBookingUrl}/${params.bookingId}`, header)
+      .get<{ success: 1, booking: MeetingData }>(`${resheduleBookingUrl}/${params.bookingId}`, header)
       .then((res) => {
         console.log("res.data", res.data);
         setBooking(res.data.booking);
@@ -57,7 +60,7 @@ const RescheduleBooking = () => {
         meetingDate: date,
       };
       axios
-        .get(
+        .get<{ suucess: 1, timeSlots: string[] }>(
           `${getTimeSlotsUrl}/${booking.userId}/${booking.eventTypeId}`,
           header
         )
@@ -194,8 +197,7 @@ const RescheduleBooking = () => {
                           date={date && moment(date).format("YYYY-MM-DD")}
                           setBookingResponse={setBookingResponse}
                           formerTimeSlot={formerTimeSlot}
-                          reschedule ={true}
-
+                          reschedule={true}
                         />
                       ))
                     ) : (
@@ -214,6 +216,15 @@ const RescheduleBooking = () => {
     </div>
   );
 };
+export interface TimeSlotProps {
+  timeSlot: string;
+  bookTime: string;
+  setBookTime: React.Dispatch<React.SetStateAction<string>>;
+  date: string;
+  setBookingResponse: React.Dispatch<React.SetStateAction<MeetingData | null>>;
+  formerTimeSlot: string;
+  reschedule: boolean;
+}
 
 const Time = ({
   timeSlot,
@@ -223,7 +234,7 @@ const Time = ({
   setBookingResponse,
   formerTimeSlot,
   reschedule,
-}) => {
+}: TimeSlotProps) => {
   return (
     <div
       style={{
@@ -240,10 +251,10 @@ const Time = ({
           width: `${bookTime === timeSlot ? "6.5rem" : "14rem"}`,
           color: `${bookTime === timeSlot ? "white" : "#0066e6"}`,
         }}
-        onClick={(e) => setBookTime(e.target.innerText)}
+        onClick={(e) => setBookTime(e.currentTarget.innerText)}
       >
         {timeSlot}
-        {formerTimeSlot === timeSlot ? <p style={{fontSize:"12px", color:"blueviolet"}}>(older slot)</p> : ""}
+        {formerTimeSlot === timeSlot ? <p style={{ fontSize: "12px", color: "blueviolet" }}>(older slot)</p> : ""}
       </span>
       {bookTime === timeSlot && (
         <BookEventPopOver

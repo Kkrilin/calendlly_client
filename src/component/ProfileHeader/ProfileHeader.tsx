@@ -2,8 +2,9 @@ import { Avatar } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { useSelector } from "react-redux";
 import LogoutPopOver from "../Utils/PopOver/LogoutPopOver";
+import { RootState } from "../../redux/store";
 const ProfileHeader = () => {
-  const { data, loading } = useSelector((state) => state.profile);
+  const { data, loading } = useSelector((state: RootState) => state.profile);
 
   // if (loading) {
   //   return <></>;
@@ -27,7 +28,7 @@ const ProfileHeader = () => {
             <Avatar
               sx={{ width: 40, height: 40 }}
               alt="profile logo"
-              //   src={}
+            //   src={}
             >
               {data.name[0]}
             </Avatar>

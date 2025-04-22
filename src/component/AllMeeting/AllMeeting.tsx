@@ -1,5 +1,5 @@
 import { Avatar, Button } from "@mui/material";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { bookingBaseUrl, header } from "../../api";
 import toast from "react-hot-toast";
@@ -8,15 +8,16 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { LucideLoader } from "lucide-react";
 import { Link } from "react-router-dom";
+import { GroupedMeetings, MeetingData } from "@/constant";
 
 const AllMeeting = () => {
-  const [allMeetings, setAllMeetings] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [allMeetings, setAllMeetings] = useState<GroupedMeetings>({});
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setLoading(true);
     axios
-      .get(bookingBaseUrl, header)
+      .get<{ sucess: 1, bookings: GroupedMeetings }>(bookingBaseUrl, header)
       .then((res) => {
         setAllMeetings(res.data.bookings);
       })
@@ -28,11 +29,7 @@ const AllMeeting = () => {
       });
   }, []);
 
-  // if (loading) {
-  //   return <LucideLoader />;
-  // }
 
-  console.log("allMeetings", allMeetings);
   return (
     <div>
       <h1>Meeting</h1>
@@ -72,8 +69,15 @@ const AllMeeting = () => {
   );
 };
 
-const Meetings = ({ date, meetings, setAllMeetings }) => {
-  const options = {
+
+interface MeetingsProps {
+  date: string;
+  meetings: MeetingData[];
+  setAllMeetings: React.Dispatch<React.SetStateAction<GroupedMeetings>>;
+}
+
+const Meetings = ({ date, meetings, setAllMeetings }: MeetingsProps) => {
+  const options: Intl.DateTimeFormatOptions = {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -103,9 +107,17 @@ const Meetings = ({ date, meetings, setAllMeetings }) => {
   );
 };
 
-const Meeting = ({ meeting, setAllMeetings, date }) => {
+interface MeetingProps {
+  meeting: MeetingData;
+  date: string;
+  setAllMeetings: React.Dispatch<React.SetStateAction<GroupedMeetings>>;
+}
+
+const Meeting = ({ meeting, setAllMeetings, date }: MeetingProps) => {
   const token = localStorage.getItem("token");
-  header.headers.Authorization = `Bearer ${token}`;
+  if (header.headers && token) {
+    header.headers.Authorization = `Bearer ${token}`;
+  }
   const handleMeetingCancel = () => {
     axios
       .delete(`${bookingBaseUrl}/${meeting.id}`, header)
