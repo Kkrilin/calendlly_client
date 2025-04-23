@@ -5,7 +5,6 @@ import EditProfile from "../../ProfileHeader/EditProfile.js";
 
 interface LogoutPopOverProps {
   children: React.ReactNode;
-  eventType: string;
 }
 
 
