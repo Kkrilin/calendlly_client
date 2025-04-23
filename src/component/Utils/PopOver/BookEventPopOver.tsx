@@ -31,7 +31,7 @@ export default function BookEventPopOver({ children, bookTime, bookDate, setBook
       <span
         className="next"
         aria-describedby={id}
-        onClick={e => handleClick}
+        onClick={handleClick}
       >
         {children}
       </span>
