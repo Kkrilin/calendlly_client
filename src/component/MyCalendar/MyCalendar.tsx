@@ -21,8 +21,8 @@ function MyCalendar({ date, setDate, availabilities, setTimeSlots }: MyCalendarP
     }
   });
 
-  const disableNonAvailableDays = () => {
-    const nonAvailableDays = disabledDate.has(date && date.getDay());
+  const disableNonAvailableDays = ({ date }: { date: Date }) => {
+    const nonAvailableDays = disabledDate.has(date.getDay());
     return nonAvailableDays;
   };
 
