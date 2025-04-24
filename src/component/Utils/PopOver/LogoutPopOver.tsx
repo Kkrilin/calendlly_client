@@ -25,7 +25,7 @@ export default function LogoutPopOver({ children }: LogoutPopOverProps) {
   return (
     <div>
       <div
-        onClick={e => handleClick}
+        onClick={handleClick}
         style={{ display: "flex", alignItems: "center" }}
       >
         {children}

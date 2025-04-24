@@ -124,6 +124,7 @@ const BookEvent = ({
                     height: "2.5rem",
                     borderRadius: "6px",
                     border: "1px solid blue",
+                    paddingLeft:"1rem"
                   }}
                   placeholder="Enter your name"
                 />
@@ -149,6 +150,7 @@ const BookEvent = ({
                     height: "2.5rem",
                     borderRadius: "6px",
                     border: "1px solid blue",
+                    paddingLeft:"1rem"
                   }}
                   placeholder="Enter your email"
                 />
