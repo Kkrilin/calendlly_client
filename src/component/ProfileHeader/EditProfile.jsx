@@ -1,20 +1,18 @@
-import { Link } from "react-router-dom";
-import EditIcon from "@mui/icons-material/Edit";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { useNavigate } from "react-router-dom";
-
-import axios from "axios";
+import { Link } from 'react-router-dom';
+import EditIcon from '@mui/icons-material/Edit';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useNavigate } from 'react-router-dom';
 
 const EventCardSeeting = ({ handleClose }) => {
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/");
+    navigate('/');
   };
 
   return (
-    <div style={{ borderRadius: "6px" }}>
-      <div style={{ padding: "10px" }}>
+    <div style={{ borderRadius: '6px' }}>
+      <div style={{ padding: '10px' }}>
         <Link to="/user/edit">
           <div className="setting_card" onClick={handleClose}>
             <EditIcon />

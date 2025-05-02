@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import React from 'react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 function MyCalendar({ date, setDate, availabilities, setTimeSlots }) {
   const today = new Date();

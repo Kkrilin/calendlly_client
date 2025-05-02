@@ -1,11 +1,10 @@
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import SettingsIcon from "@mui/icons-material/Settings";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { config } from "../../config";
-import { Stack } from "@mui/material";
-import { Link } from "react-router-dom";
-import { toast } from "react-hot-toast";
-import EventSettingPopOver from "../Utils/PopOver/EventSettingPopOver";
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import SettingsIcon from '@mui/icons-material/Settings';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { config } from '../../config';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import EventSettingPopOver from '../Utils/PopOver/EventSettingPopOver';
 
 const { clientBaseUrl } = config;
 
@@ -15,10 +14,10 @@ const EventTypeCard = ({ eventType }) => {
     navigator.clipboard
       .writeText(url)
       .then(() => {
-        toast.success("Copied to clipboard!");
+        toast.success('Copied to clipboard!');
       })
       .catch((err) => {
-        toast.error("Failed to copy: ", err.message);
+        toast.error('Failed to copy: ', err.message);
       });
   };
   return (
@@ -26,29 +25,29 @@ const EventTypeCard = ({ eventType }) => {
       <div>
         <div
           style={{
-            display: "flex",
-            justifyContent: "space-between",
-            padding: "1rem",
+            display: 'flex',
+            justifyContent: 'space-between',
+            padding: '1rem',
           }}
         >
           <input id={eventType.id} type="checkbox" />
           <EventSettingPopOver eventType={eventType}>
-            <SettingsIcon style={{ width: "1rem", height: "1rem" }} />
+            <SettingsIcon style={{ width: '1rem', height: '1rem' }} />
             <ArrowDropDownIcon />
           </EventSettingPopOver>
         </div>
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.5rem",
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.5rem',
             // padding: "10px 0",
-            padding: "0 0 1rem 1rem",
-            borderBottom: "1px solid #e7f1ff",
+            padding: '0 0 1rem 1rem',
+            borderBottom: '1px solid #e7f1ff',
           }}
         >
-          <h4 style={{ fontWeight: "400" }}>{eventType.title}</h4>
-          <span style={{ fontWeight: "400", color: "rgb(78, 108, 150)" }}>
+          <h4 style={{ fontWeight: '400' }}>{eventType.title}</h4>
+          <span style={{ fontWeight: '400', color: 'rgb(78, 108, 150)' }}>
             {eventType.durationMinutes} min
           </span>
           <Link
@@ -61,16 +60,16 @@ const EventTypeCard = ({ eventType }) => {
         </div>
         <div
           style={{
-            color: "blue",
-            display: "flex",
-            fontWeight: "400",
-            cursor: "pointer",
-            padding: "1rem",
+            color: 'blue',
+            display: 'flex',
+            fontWeight: '400',
+            cursor: 'pointer',
+            padding: '1rem',
           }}
           onClick={handleCopy}
         >
-          <ContentCopyIcon style={{ width: "1rem", height: "1rem" }} />
-          <h4 style={{ fontSize: "0.875rem", fontWeight: "400" }}>Copy link</h4>
+          <ContentCopyIcon style={{ width: '1rem', height: '1rem' }} />
+          <h4 style={{ fontSize: '0.875rem', fontWeight: '400' }}>Copy link</h4>
         </div>
       </div>
     </div>

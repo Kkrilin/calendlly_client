@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { generateTimeOptions, toSeconds } from "../../utils";
+import { useEffect } from 'react';
+import { generateTimeOptions, toSeconds } from '../../utils';
+import axios from 'axios';
+import { availabilityBaseUrl, header } from '../../api';
+import toast from 'react-hot-toast';
 
 const timeOptions = generateTimeOptions(15, 12);
-import HoursDropDown from "../Utils/HoursDropDown";
-import axios from "axios";
-import { availabilityBaseUrl, header } from "../../api";
-import toast from "react-hot-toast";
+
 const StartAndEndTime = ({
   setStartTime,
   setEndTime,
@@ -22,37 +22,37 @@ const StartAndEndTime = ({
       if (setAvailablityError) {
         setAvailablityError(true);
       }
-      setError("startTime is large");
+      setError('startTime is large');
       return true;
     }
     if (toSeconds(startTime) === toSeconds(endTime)) {
       if (setAvailablityError) {
         setAvailablityError(true);
       }
-      setError("startTime and endTime equal");
+      setError('startTime and endTime equal');
       return true;
     } else {
       if (setAvailablityError) {
         setAvailablityError(false);
       }
-      setError("");
+      setError('');
     }
     return false;
   };
   useEffect(() => {
     if (toSeconds(startTime) > toSeconds(endTime)) {
-      setError("startTime is large");
+      setError('startTime is large');
       return;
     }
     if (toSeconds(startTime) === toSeconds(endTime)) {
-      setError("startTime and endTime equal");
+      setError('startTime and endTime equal');
       return;
     } else {
-      setError("");
+      setError('');
     }
   }, []);
 
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   header.headers.Authorization = `Bearer ${token}`;
 
   const handleStartTimeChange = (e) => {
@@ -69,7 +69,7 @@ const StartAndEndTime = ({
     axios
       .put(`${availabilityBaseUrl}/${avail.id}`, payload, header)
       .then((res) => {
-        toast.success("changes saved");
+        toast.success('changes saved');
       })
       .catch((error) => {
         toast.error(error.messages);
@@ -90,7 +90,7 @@ const StartAndEndTime = ({
     axios
       .put(`${availabilityBaseUrl}/${avail.id}`, payload, header)
       .then((res) => {
-        toast.success("changes saved");
+        toast.success('changes saved');
       })
       .catch((error) => {
         toast.error(error.messages);
@@ -98,33 +98,25 @@ const StartAndEndTime = ({
   };
   return (
     <div>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <select
-          className="select_option"
-          value={startTime}
-          onChange={handleStartTimeChange}
-        >
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <select className="select_option" value={startTime} onChange={handleStartTimeChange}>
           {timeOptions.map((time) => (
             <option key={time} value={time}>
               {time}
             </option>
           ))}
         </select>
-        <h3 style={{ margin: "0 4px" }}>-</h3>
-        <select
-          className="select_option"
-          value={endTime}
-          onChange={handleEndTimeChange}
-        >
+        <h3 style={{ margin: '0 4px' }}>-</h3>
+        <select className="select_option" value={endTime} onChange={handleEndTimeChange}>
           {timeOptions.map((time) => (
             <option key={time} value={time}>
               {time}
             </option>
           ))}
         </select>
-        <span style={{ marginLeft: "2rem" }}>X</span>
+        <span style={{ marginLeft: '2rem' }}>X</span>
       </div>
-      {error && <h5 style={{ color: "red", fontWeight: "300" }}>{error}</h5>}
+      {error && <h5 style={{ color: 'red', fontWeight: '300' }}>{error}</h5>}
     </div>
   );
 };

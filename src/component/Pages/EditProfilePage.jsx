@@ -1,25 +1,25 @@
-import { Avatar } from "@mui/material";
-import { useSelector } from "react-redux";
-import EditIcon from "@mui/icons-material/Edit";
-import SaveIcon from "@mui/icons-material/Save";
-import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
-import { userBaseUrl, header } from "../../api";
-import axios from "axios";
-import { useDispatch } from "react-redux";
-import { setProfileData } from "../../redux/profileSlice";
-import toast from "react-hot-toast";
+import { Avatar } from '@mui/material';
+import { useSelector } from 'react-redux';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import CloseIcon from '@mui/icons-material/Close';
+import { useState } from 'react';
+import { userBaseUrl, header } from '../../api';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setProfileData } from '../../redux/profileSlice';
+import toast from 'react-hot-toast';
 
 const EditProfilePage = () => {
   const { data } = useSelector((state) => state.profile);
   const [edit, setEdit] = useState(false);
-  const [field, setField] = useState("");
+  const [field, setField] = useState('');
   const [formData, setFormData] = useState({
     name: data.name,
     email: data.email,
   });
   const dispatch = useDispatch();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   header.headers.Authorization = `Bearer ${token}`;
 
   const handleClick = (e) => {
@@ -29,10 +29,10 @@ const EditProfilePage = () => {
         .post(userBaseUrl, formData, header)
         .then((res) => {
           dispatch(setProfileData({ data: res.data.userData }));
-          toast.success("changes saved");
+          toast.success('changes saved');
         })
-        .catch((error) => toast.error("something wen wrong"));
-      console.log("Saving changes:", formData[fieldName]);
+        .catch((error) => toast.error('something wen wrong'));
+      console.log('Saving changes:', formData[fieldName]);
     }
     setEdit((prevState) => !prevState);
     setField(fieldName);
@@ -52,11 +52,11 @@ const EditProfilePage = () => {
         <h1>User Profile</h1>
         <div
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "2rem",
-            padding: "2rem 0",
-            borderBottom: "1px solid greylight",
+            display: 'flex',
+            alignItems: 'center',
+            gap: '2rem',
+            padding: '2rem 0',
+            borderBottom: '1px solid greylight',
           }}
         >
           <Avatar sx={{ width: 180, height: 180 }} alt="profile logo">
@@ -67,37 +67,37 @@ const EditProfilePage = () => {
             <h3>{data.email}</h3>
           </div>
         </div>
-        <div style={{ padding: "2rem" }}>
+        <div style={{ padding: '2rem' }}>
           {/* Name Field */}
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "2rem",
-              padding: "1rem",
+              display: 'flex',
+              alignItems: 'center',
+              gap: '2rem',
+              padding: '1rem',
             }}
           >
             <span>
               <span className="field">name: </span>
-              {edit && field === "name" ? (
+              {edit && field === 'name' ? (
                 <input
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
                   style={{
-                    width: "16rem",
-                    height: "2rem",
-                    borderRadius: "6px",
-                    border: "1px solid grey",
-                    fontSize:"0.875rem"
+                    width: '16rem',
+                    height: '2rem',
+                    borderRadius: '6px',
+                    border: '1px solid grey',
+                    fontSize: '0.875rem',
                   }}
                 />
               ) : (
                 <span
                   style={{
-                    display: "inline-block",
-                    width: "16rem",
-                    height: "2rem",
+                    display: 'inline-block',
+                    width: '16rem',
+                    height: '2rem',
                   }}
                 >
                   {data.name}
@@ -105,43 +105,40 @@ const EditProfilePage = () => {
               )}
             </span>
             <span data-field="name" onClick={handleClick}>
-              {edit && field === "name" ? <SaveIcon /> : <EditIcon />}
+              {edit && field === 'name' ? <SaveIcon /> : <EditIcon />}
             </span>
-            {edit && field === "name" && (
-              <CloseIcon onClick={() => setEdit(false)} />
-            )}
+            {edit && field === 'name' && <CloseIcon onClick={() => setEdit(false)} />}
           </div>
           {/* Email Field */}
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "2rem",
-              padding: "1rem",
+              display: 'flex',
+              alignItems: 'center',
+              gap: '2rem',
+              padding: '1rem',
             }}
           >
             <span>
               <span className="field">email: </span>
-              {edit && field === "email" ? (
+              {edit && field === 'email' ? (
                 <input
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
                   style={{
-                    width: "16rem",
-                    height: "2rem",
-                    borderRadius: "6px",
-                    border: "1px solid grey",
-                    fontSize:"0.875rem"
-
+                    width: '16rem',
+                    height: '2rem',
+                    borderRadius: '6px',
+                    border: '1px solid grey',
+                    fontSize: '0.875rem',
                   }}
                 />
               ) : (
                 <span
                   style={{
-                    display: "inline-block",
-                    width: "16rem",
-                    height: "2rem",
+                    display: 'inline-block',
+                    width: '16rem',
+                    height: '2rem',
                   }}
                 >
                   {data.email}
@@ -149,11 +146,9 @@ const EditProfilePage = () => {
               )}
             </span>
             <span data-field="email" onClick={handleClick}>
-              {edit && field === "email" ? <SaveIcon /> : <EditIcon />}
+              {edit && field === 'email' ? <SaveIcon /> : <EditIcon />}
             </span>
-            {edit && field === "email" && (
-              <CloseIcon onClick={() => setEdit(false)} />
-            )}
+            {edit && field === 'email' && <CloseIcon onClick={() => setEdit(false)} />}
           </div>
         </div>
       </div>

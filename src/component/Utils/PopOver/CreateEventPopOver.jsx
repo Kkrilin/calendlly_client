@@ -1,7 +1,7 @@
-import * as React from "react";
-import Popover from "@mui/material/Popover";
-import Button from "@mui/material/Button";
-import CreateEventType from "../../EventTypes/CreateEventType.jsx";
+import * as React from 'react';
+import Popover from '@mui/material/Popover';
+import Button from '@mui/material/Button';
+import CreateEventType from '../../EventTypes/CreateEventType.jsx';
 
 export default function CreateEventPopOver({ children }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -15,7 +15,7 @@ export default function CreateEventPopOver({ children }) {
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  const id = open ? 'simple-popover' : undefined;
 
   return (
     <div>
@@ -35,12 +35,12 @@ export default function CreateEventPopOver({ children }) {
         anchorReference="anchorPosition"
         anchorPosition={{ top: 300, left: 1200 }}
         anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
       >
         <CreateEventType handleClose={handleClose} />

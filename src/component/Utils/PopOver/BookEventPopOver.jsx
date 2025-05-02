@@ -1,7 +1,6 @@
-import * as React from "react";
-import Popover from "@mui/material/Popover";
-import Button from "@mui/material/Button";
-import BookEvent from "../../Booking/BookEvent";
+import * as React from 'react';
+import Popover from '@mui/material/Popover';
+import BookEvent from '../../Booking/BookEvent';
 
 export default function BookEventPopOver({
   children,
@@ -21,16 +20,11 @@ export default function BookEventPopOver({
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  const id = open ? 'simple-popover' : undefined;
 
   return (
     <div>
-      <span
-        className="next"
-        aria-describedby={id}
-        variant="contained"
-        onClick={handleClick}
-      >
+      <span className="next" aria-describedby={id} onClick={handleClick}>
         {children}
       </span>
       <Popover
@@ -41,12 +35,12 @@ export default function BookEventPopOver({
         anchorReference="anchorPosition"
         anchorPosition={{ top: 300, left: 1200 }}
         anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
       >
         <BookEvent

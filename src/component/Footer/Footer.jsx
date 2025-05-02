@@ -1,55 +1,54 @@
 const Footer = () => {
   return (
     <footer>
-      <div style={{ width: "100%", maxWidth: "1208px", paddingTop: "4rem" }}>
+      <div style={{ width: '100%', maxWidth: '1208px', paddingTop: '4rem' }}>
         <div>
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: "32px",
-              paddingBottom: "4rem",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '32px',
+              paddingBottom: '4rem',
             }}
           >
             <div
               style={{
-                width: "100%",
-                maxWidth: "400px",
-                display: "flex",
-                flexDirection: "column",
+                width: '100%',
+                maxWidth: '400px',
+                display: 'flex',
+                flexDirection: 'column',
                 // gap: "20px",
               }}
             >
               <h3
                 style={{
-                  fontSize: "2.5rem",
-                  color: "#0B3558",
-                  fontWeight: "600",
-                  lineHeight: "5rem",
+                  fontSize: '2.5rem',
+                  color: '#0B3558',
+                  fontWeight: '600',
+                  lineHeight: '5rem',
                 }}
               >
-                Easy <span style={{ color: "#006BFF" }}>ahead</span>
+                Easy <span style={{ color: '#006BFF' }}>ahead</span>
               </h3>
               <p
                 style={{
-                  color: "rgb(93, 109, 123)",
-                  fontWeight: "300",
-                  fontSize: "1rem",
+                  color: 'rgb(93, 109, 123)',
+                  fontWeight: '300',
+                  fontSize: '1rem',
                 }}
               >
-                We take the work out of connecting with others so you can
-                accomplish more.
+                We take the work out of connecting with others so you can accomplish more.
               </p>
             </div>
             <div className="footer_left">
               <button
                 style={{
-                  color: "#056EFF",
-                  padding: "0.6rem",
-                  backgroundColor: "#E6F0FF",
-                  borderRadius: "6666px",
-                  textTransform: "uppercase",
+                  color: '#056EFF',
+                  padding: '0.6rem',
+                  backgroundColor: '#E6F0FF',
+                  borderRadius: '6666px',
+                  textTransform: 'uppercase',
                 }}
               >
                 Featured
@@ -57,18 +56,18 @@ const Footer = () => {
 
               <h4
                 style={{
-                  fontSize: "1.4rem",
-                  color: "#0B3558",
-                  fontWeight: "500",
+                  fontSize: '1.4rem',
+                  color: '#0B3558',
+                  fontWeight: '500',
                 }}
               >
                 2024 Report: The State of Meetings
               </h4>
               <p
                 style={{
-                  color: "rgb(93, 109, 123)",
-                  fontWeight: "300",
-                  fontSize: "1rem",
+                  color: 'rgb(93, 109, 123)',
+                  fontWeight: '300',
+                  fontSize: '1rem',
                 }}
               >
                 See the latest data on meeting culture and productivity

@@ -1,24 +1,17 @@
-import * as React from "react";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
-import { Button } from "@mui/material";
-import { eventBookingUrl, header, resheduleBookingUrl } from "../../api";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import { useState } from "react";
-import toast from "react-hot-toast";
+import * as React from 'react';
+import { Button } from '@mui/material';
+import { eventBookingUrl, header, resheduleBookingUrl } from '../../api';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
+import BackDropLoader from '../Utils/Loader/BackDropLoader';
 
-const BookEvent = ({
-  handleClose,
-  bookTime,
-  bookDate,
-  setBookingResponse,
-  reschedule,
-}) => {
-  const [guestName, setGuestName] = useState("");
-  const [guestEmail, setGuestEmail] = useState("");
-  const [rescheduleReason, setRescheduleReason] = useState("");
-  const [error, setError] = useState("");
+const BookEvent = ({ handleClose, bookTime, bookDate, setBookingResponse, reschedule }) => {
+  const [guestName, setGuestName] = useState('');
+  const [guestEmail, setGuestEmail] = useState('');
+  const [rescheduleReason, setRescheduleReason] = useState('');
+  const [error, setError] = useState('');
   const [open, setOpen] = React.useState(false);
   const handleCloseBackDrop = () => {
     setOpen(false);
@@ -32,7 +25,7 @@ const BookEvent = ({
     bookDate,
     bookTime,
   };
-  console.log("reschedule");
+  console.log('reschedule');
   if (reschedule) {
     payload.rescheduleReason = rescheduleReason;
   } else {
@@ -40,7 +33,7 @@ const BookEvent = ({
     payload.guestEmail = guestEmail;
   }
 
-  console.log("payload", payload);
+  console.log('payload', payload);
   const bookingUrl = `${eventBookingUrl}/${userId}/${eventId}`;
   const reshceduleUrl = `${resheduleBookingUrl}/${bookingId}`;
   const url = reschedule ? reshceduleUrl : bookingUrl;
@@ -48,7 +41,7 @@ const BookEvent = ({
     if (reschedule && !rescheduleReason) {
       setError("can't be blank");
       return;
-    } else if (!reschedule &&(!guestName || !guestEmail)) {
+    } else if (!reschedule && (!guestName || !guestEmail)) {
       setError("can't be blank");
       return;
     }
@@ -68,8 +61,8 @@ const BookEvent = ({
   };
 
   return (
-    <div style={{ width: "30rem", height: "20rem" }}>
-      <div style={{ padding: "1rem" }}>
+    <div style={{ width: '30rem', height: '20rem' }}>
+      <div style={{ padding: '1rem' }}>
         <h3>Enter Details</h3>
         <form>
           {reschedule ? (
@@ -88,9 +81,9 @@ const BookEvent = ({
             <>
               <label
                 style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  marginBottom: "1rem",
+                  display: 'flex',
+                  flexDirection: 'column',
+                  marginBottom: '1rem',
                 }}
                 htmlFor="name"
               >
@@ -103,9 +96,9 @@ const BookEvent = ({
                   value={guestName}
                   onInput={(e) => setGuestName(e.target.value)}
                   style={{
-                    height: "2.5rem",
-                    borderRadius: "6px",
-                    border: "1px solid blue",
+                    height: '2.5rem',
+                    borderRadius: '6px',
+                    border: '1px solid blue',
                   }}
                   placeholder="Enter your name"
                 />
@@ -113,9 +106,9 @@ const BookEvent = ({
               </label>
               <label
                 style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  marginBottom: "1rem",
+                  display: 'flex',
+                  flexDirection: 'column',
+                  marginBottom: '1rem',
                 }}
                 htmlFor="email"
               >
@@ -128,9 +121,9 @@ const BookEvent = ({
                   value={guestEmail}
                   onInput={(e) => setGuestEmail(e.target.value)}
                   style={{
-                    height: "2.5rem",
-                    borderRadius: "6px",
-                    border: "1px solid blue",
+                    height: '2.5rem',
+                    borderRadius: '6px',
+                    border: '1px solid blue',
                   }}
                   placeholder="Enter your email"
                 />
@@ -139,29 +132,14 @@ const BookEvent = ({
             </>
           )}
         </form>
-        <SimpleBackdrop open={open} HandleBooking={HandleBooking}>
-          {reschedule ? "update Event" : "Schedule Event"}
-        </SimpleBackdrop>
+        <BackDropLoader open={open}>
+          <Button onClick={HandleBooking} variant="contained">
+            {reschedule ? 'update Event' : 'Schedule Event'}
+          </Button>
+        </BackDropLoader>
       </div>
     </div>
   );
 };
-
-function SimpleBackdrop({ children, handleOpen, open, HandleBooking }) {
-  return (
-    <div>
-      <Button onClick={HandleBooking} variant="contained">
-        {children}
-      </Button>
-      <Backdrop
-        sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
-        open={open}
-        // onClick={handleClose}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    </div>
-  );
-}
 
 export default BookEvent;

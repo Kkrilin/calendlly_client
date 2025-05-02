@@ -1,9 +1,8 @@
-import * as React from "react";
-import Popover from "@mui/material/Popover";
-import Button from "@mui/material/Button";
-import EditProfile from "../../ProfileHeader/EditProfile.jsx";
+import * as React from 'react';
+import Popover from '@mui/material/Popover';
+import EditProfile from '../../ProfileHeader/EditProfile.jsx';
 
-export default function LogoutPopOver({ children, eventType }) {
+export default function LogoutPopOver({ children }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -15,14 +14,11 @@ export default function LogoutPopOver({ children, eventType }) {
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  const id = open ? 'simple-popover' : undefined;
 
   return (
     <div>
-      <div
-        onClick={handleClick}
-        style={{ display: "flex", alignItems: "center" }}
-      >
+      <div onClick={handleClick} style={{ display: 'flex', alignItems: 'center' }}>
         {children}
       </div>
       <Popover
@@ -31,12 +27,12 @@ export default function LogoutPopOver({ children, eventType }) {
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "top",
-          horizontal: "left",
+          vertical: 'top',
+          horizontal: 'left',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
       >
         <EditProfile handleClose={handleClose} />

@@ -1,17 +1,16 @@
-import { Link } from "react-router-dom";
-import { toast } from "react-hot-toast";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { eventBaseUrl, header } from "../../api";
-import { removeEventType } from "../../redux/eventTypeSlice";
-import { useDispatch } from "react-redux";
+import { toast } from 'react-hot-toast';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { eventBaseUrl, header } from '../../api';
+import { removeEventType } from '../../redux/eventTypeSlice';
+import { useDispatch } from 'react-redux';
 
-import axios from "axios";
+import axios from 'axios';
 
 const EventCardSeeting = ({ eventType, handleClose }) => {
   const dispatch = useDispatch();
 
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   header.headers.Authorization = `Bearer ${token}`;
 
   const deleteEventUrl = `${eventBaseUrl}/${eventType.id}`;
@@ -30,8 +29,8 @@ const EventCardSeeting = ({ eventType, handleClose }) => {
   };
 
   return (
-    <div style={{ borderRadius: "6px" }}>
-      <div style={{ padding: "10px" }}>
+    <div style={{ borderRadius: '6px' }}>
+      <div style={{ padding: '10px' }}>
         <div className="setting_card">
           <EditIcon />
           <span>Edit</span>

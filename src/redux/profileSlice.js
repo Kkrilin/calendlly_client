@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   data: {},
@@ -8,10 +8,11 @@ const initialState = {
 };
 
 const profileSlice = createSlice({
-  name: "profile",
+  name: 'profile',
   initialState,
   reducers: {
     setProfileData(state, action) {
+      console.log(action.payload, 'action.payload');
       state.login = true;
       state.data = action.payload.data || {};
       state.loading = false;

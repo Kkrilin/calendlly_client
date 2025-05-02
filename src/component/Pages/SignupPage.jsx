@@ -1,48 +1,41 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { config } from "../../config";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useGoogleLogin } from "@react-oauth/google";
-import { setProfileData } from "../../redux/profileSlice";
-import { useDispatch } from "react-redux";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useGoogleLogin } from '@react-oauth/google';
 
-import { toast } from "react-hot-toast";
-const { serverBaseUrl } = config;
+import { toast } from 'react-hot-toast';
+import { googleAuthUrl, signUpUrl } from '../../api';
 
 const SignupPage = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
-
-  const dispatch = useDispatch();
 
   const payload = {
     name,
     email,
     password,
   };
-  const signUpUrl = `${serverBaseUrl}/auth/signup`;
 
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
     if (!name || !email || !password) {
-      setError("error in the signup");
+      setError('error in the signup');
       return;
     }
 
     if (password.length < 6) {
-      setError("error in the signup");
+      setError('error in the signup');
       return;
     }
 
     try {
       const signUpRes = await axios.post(signUpUrl, payload);
-      localStorage.setItem("token", signUpRes.data.token);
-      dispatch(setProfileData({ data: signUpRes.data.userData }));
-      navigate("/user/event_type");
+      localStorage.setItem('token', signUpRes.data.token);
+      navigate('/user/event-type');
     } catch (error) {
       setError(error.response?.data?.message);
       toast.error(error.response?.data?.message);
@@ -51,19 +44,16 @@ const SignupPage = () => {
   };
 
   const handleGoogleAuth = useGoogleLogin({
-    flow: "auth-code",
-    scope:
-      "openid email profile https://www.googleapis.com/auth/calendar.events",
-    access_type: "offline",
-    prompt: "consent",
+    flow: 'auth-code',
+    scope: 'openid email profile https://www.googleapis.com/auth/calendar.events',
+    access_type: 'offline',
+    prompt: 'consent',
     onSuccess: async ({ code }) => {
-      console.log("code", code);
+      console.log('code', code);
       try {
-        const res = await axios.post(`${serverBaseUrl}/auth/google`, { code });
-        console.log("token", res.data.token);
-        localStorage.setItem("token", res.data.token);
-        dispatch(setProfileData({ data: res.data.userData }));
-        navigate("/user/event_type");
+        const res = await axios.post(googleAuthUrl, { code });
+        localStorage.setItem('token', res.data.token);
+        navigate('/user/event-type');
       } catch (error) {
         toast.error(error.response.data.message);
 
@@ -80,10 +70,10 @@ const SignupPage = () => {
         <div>
           <h2
             style={{
-              fontSize: "3.2rem",
-              color: "#0B3558",
-              fontWeight: "600",
-              lineHeight: "4rem",
+              fontSize: '3.2rem',
+              color: '#0B3558',
+              fontWeight: '600',
+              lineHeight: '4rem',
             }}
           >
             Sign up for your Calendlly account
@@ -93,15 +83,12 @@ const SignupPage = () => {
               <label
                 htmlFor="name"
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                 }}
               >
-                Name{" "}
-                {error && !name && (
-                  <span className="error">enter the name</span>
-                )}
+                Name {error && !name && <span className="error">enter the name</span>}
               </label>
               <input
                 id="name"
@@ -115,15 +102,13 @@ const SignupPage = () => {
               <label
                 htmlFor="email"
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                 }}
               >
                 Email
-                {error && !email && (
-                  <span className="error">enter the email</span>
-                )}
+                {error && !email && <span className="error">enter the email</span>}
               </label>
               <input
                 id="email"
@@ -136,24 +121,22 @@ const SignupPage = () => {
             <div>
               <label
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                 }}
                 htmlFor="password"
               >
                 Password
-                {error && !password && (
-                  <span className="error">enter the password</span>
-                )}
+                {error && !password && <span className="error">enter the password</span>}
                 {error && password.length < 6 && (
                   <span className="error">password lenth is small</span>
                 )}
                 <span
                   style={{
-                    color: "#372573",
-                    fontWeight: "300",
-                    fontSize: "0.875rem",
+                    color: '#372573',
+                    fontWeight: '300',
+                    fontSize: '0.875rem',
                   }}
                 >
                   6 character least
@@ -171,14 +154,14 @@ const SignupPage = () => {
             <button
               className="google_button"
               style={{
-                fontSize: "1.2rem",
-                fontWeight: "500",
-                padding: "1rem 40%",
-                textAlign: "center",
-                width: "100%",
-                margin: "20px 0",
-                display: "grid",
-                placeItems: "center",
+                fontSize: '1.2rem',
+                fontWeight: '500',
+                padding: '1rem 40%',
+                textAlign: 'center',
+                width: '100%',
+                margin: '20px 0',
+                display: 'grid',
+                placeItems: 'center',
               }}
               type="submit"
             >
@@ -187,45 +170,45 @@ const SignupPage = () => {
           </form>
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
             }}
           >
             <div
               style={{
-                width: "100%",
-                overflow: "hidden",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
+                width: '100%',
+                overflow: 'hidden',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
             >
               <p className="before_after">OR</p>
             </div>
             <p
               style={{
-                color: "rgb(83, 103, 120)",
-                fontWeight: "300",
-                fontSize: "1rem",
-                margin: "12px 0",
+                color: 'rgb(83, 103, 120)',
+                fontWeight: '300',
+                fontSize: '1rem',
+                margin: '12px 0',
               }}
             >
-              Easily connect your calender by signing up with your Google{" "}
+              Easily connect your calender by signing up with your Google{' '}
             </p>
             <button
               onClick={handleGoogleAuth}
               className="google_button"
-              style={{ margin: "20px auto" }}
+              style={{ margin: '20px auto' }}
             >
               <span>
                 <img src="https://calendly.com/media/googleLogo.svg" alt="" />
               </span>
               <span
                 style={{
-                  fontSize: "1.2rem",
-                  marginRight: "15px",
-                  fontWeight: "500",
+                  fontSize: '1.2rem',
+                  marginRight: '15px',
+                  fontWeight: '500',
                 }}
               >
                 Sign up with Google
@@ -234,7 +217,7 @@ const SignupPage = () => {
             <Link
               to="/login"
               style={{
-                color: "blue",
+                color: 'blue',
               }}
             >
               Log in

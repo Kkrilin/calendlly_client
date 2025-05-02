@@ -15,7 +15,7 @@ a {
 }
 
 html {
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 500;
   font-style: normal;
 }
@@ -118,7 +118,8 @@ button {
 
 .right_landingpage {
   border: 1px solid rgb(224, 224, 224);
-  box-shadow: rgba(71, 103, 136, 0.04) 0px 4px 5px 0px,
+  box-shadow:
+    rgba(71, 103, 136, 0.04) 0px 4px 5px 0px,
     rgba(71, 103, 136, 0.03) 0px 8px 15px 0px,
     rgba(71, 103, 136, 0.08) 0px 30px 50px 0px;
   border-radius: 16px;
@@ -127,7 +128,8 @@ button {
 
 .footer_left {
   border: 1px solid rgb(224, 224, 224);
-  box-shadow: rgba(71, 103, 136, 0.04) 0px 4px 5px 0px,
+  box-shadow:
+    rgba(71, 103, 136, 0.04) 0px 4px 5px 0px,
     rgba(71, 103, 136, 0.03) 0px 8px 15px 0px,
     rgba(71, 103, 136, 0.08) 0px 30px 50px 0px;
   border-radius: 16px;
@@ -152,7 +154,7 @@ button {
 }
 
 .before_after::before {
-  content: "";
+  content: '';
   position: absolute;
   left: 100%;
   top: 50%;
@@ -162,7 +164,7 @@ button {
 }
 
 .before_after::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 50%;
   right: 100%;
@@ -258,7 +260,8 @@ footer {
 
 .signup_page > div {
   border: 1px solid rgb(224, 224, 224);
-  box-shadow: rgba(71, 103, 136, 0.04) 0px 4px 5px 0px,
+  box-shadow:
+    rgba(71, 103, 136, 0.04) 0px 4px 5px 0px,
     rgba(71, 103, 136, 0.03) 0px 8px 15px 0px,
     rgba(71, 103, 136, 0.08) 0px 30px 50px 0px;
   border-radius: 16px;
@@ -350,7 +353,8 @@ footer {
 
 .availability_container {
   border: 1px solid rgb(224, 224, 224);
-  box-shadow: rgba(71, 103, 136, 0.04) 0px 4px 5px 0px,
+  box-shadow:
+    rgba(71, 103, 136, 0.04) 0px 4px 5px 0px,
     rgba(71, 103, 136, 0.03) 0px 8px 15px 0px,
     rgba(71, 103, 136, 0.08) 0px 30px 50px 0px;
   border-radius: 16px;
@@ -395,7 +399,8 @@ select {
 
 .event_card_container {
   /* border: 1px solid rgb(224, 224, 224); */
-  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+  box-shadow:
+    rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
     rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   border-radius: 10px;
   transition: all 0.1s ease-in-out;
@@ -454,7 +459,8 @@ select {
   height: 75vh;
   /* padding: 4rem; */
   gap: 1rem;
-  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+  box-shadow:
+    rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
     rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   border-radius: 10px;
 }
@@ -499,7 +505,8 @@ select {
 
 .meetings_container {
   padding-top: 1rem;
-  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+  box-shadow:
+    rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
     rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   border-radius: 10px;
   background-color: white;
@@ -536,7 +543,8 @@ select {
   width: 75vw;
   height: 65vh;
   padding: 1rem;
-  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+  box-shadow:
+    rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
     rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   border-radius: 10px;
 }
@@ -545,7 +553,8 @@ select {
   width: max-content;
   height: 6rem;
   padding: 1rem;
-  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+  box-shadow:
+    rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
     rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   border-radius: 10px;
   text-align: center;

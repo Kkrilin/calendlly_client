@@ -1,4 +1,4 @@
-import { generateTimeOptions } from "../../utils";
+import { generateTimeOptions } from '../../utils';
 
 const timeOptions = generateTimeOptions(15, 12);
 const HoursDropDown = () => {

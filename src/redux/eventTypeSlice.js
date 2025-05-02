@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   events: [],
@@ -8,7 +8,7 @@ const initialState = {
 };
 
 const eventTypeSlice = createSlice({
-  name: "eventType",
+  name: 'eventType',
   initialState,
   reducers: {
     setEventTypeData(state, action) {
@@ -26,7 +26,6 @@ const eventTypeSlice = createSlice({
   },
 });
 
-export const { setEventTypeData, addEventType, removeEventType } =
-  eventTypeSlice.actions;
+export const { setEventTypeData, addEventType, removeEventType } = eventTypeSlice.actions;
 
 export default eventTypeSlice.reducer;

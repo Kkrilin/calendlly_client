@@ -1,25 +1,14 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import { configureStore } from '@reduxjs/toolkit';
 
 // slice
-import profileReducer from "./profileSlice.js";
-import eventTypeReducer from "./eventTypeSlice.js";
-const userPersistConfig = {
-  key: "profile",
-  storage,
-  whitelist: ["data"],
-};
-
-const persistUserReducer = persistReducer(userPersistConfig, profileReducer);
+import profileReducer from './profileSlice.js';
+import eventTypeReducer from './eventTypeSlice.js';
 
 const store = configureStore({
   reducer: {
-    profile: persistUserReducer,
+    profile: profileReducer,
     eventType: eventTypeReducer,
   },
 });
 
 export default store;
-
-export const persistor = persistStore(store);

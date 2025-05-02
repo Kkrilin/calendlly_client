@@ -1,21 +1,21 @@
-import { Button } from "@mui/material";
-import { useState } from "react";
-import { eventBaseUrl } from "../../api.js";
-import { header } from "../../api.js";
-import axios from "axios";
-import { useDispatch } from "react-redux";
-import { addEventType } from "../../redux/eventTypeSlice.js";
+import { Button } from '@mui/material';
+import { useState } from 'react';
+import { eventBaseUrl } from '../../api.js';
+import { header } from '../../api.js';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { addEventType } from '../../redux/eventTypeSlice.js';
 
 const CreateEventType = ({ handleClose }) => {
-  const [eventName, setEventName] = useState("");
+  const [eventName, setEventName] = useState('');
   const [duration, setDuration] = useState(15);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const dispatch = useDispatch();
   const handleEventNameInput = (e) => {
     if (!e.target.value) {
       setError(`event name can't be empty`);
     } else {
-      setError("");
+      setError('');
     }
     setEventName(e.target.value);
   };
@@ -36,21 +36,21 @@ const CreateEventType = ({ handleClose }) => {
         handleClose(null);
       })
       .catch((error) => {
-        console.log("error create", error);
+        console.log('error create', error);
       });
   };
   return (
     <div className="create_event_container">
-      <div style={{ padding: "1rem" }}>
+      <div style={{ padding: '1rem' }}>
         <h3>New Event Type</h3>
         <div>
           <label
             style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              gap: "6px",
-              marginBottom: "16px",
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              gap: '6px',
+              marginBottom: '16px',
             }}
             htmlFor="evnet_name"
           >
@@ -66,11 +66,11 @@ const CreateEventType = ({ handleClose }) => {
           </label>
           <label
             style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              gap: "6px",
-              marginBottom: "16px",
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              gap: '6px',
+              marginBottom: '16px',
             }}
             htmlFor="duration"
           >
@@ -87,7 +87,7 @@ const CreateEventType = ({ handleClose }) => {
             </select>
           </label>
         </div>
-        <div style={{ display: "flex", justifyContent: "end" }}>
+        <div style={{ display: 'flex', justifyContent: 'end' }}>
           <Button onClick={() => handleClose(null)}>cancel</Button>
           <Button onClick={handleEventSubmit}>submit</Button>
         </div>

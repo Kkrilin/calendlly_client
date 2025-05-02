@@ -1,7 +1,6 @@
-import * as React from "react";
-import Popover from "@mui/material/Popover";
-import Button from "@mui/material/Button";
-import EventCardSeeting from "../../EventTypes/EventCardSeeting.jsx";
+import * as React from 'react';
+import Popover from '@mui/material/Popover';
+import EventCardSeeting from '../../EventTypes/EventCardSeeting.jsx';
 
 export default function EventSettingPopOver({ children, eventType }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -15,14 +14,11 @@ export default function EventSettingPopOver({ children, eventType }) {
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
+  const id = open ? 'simple-popover' : undefined;
 
   return (
     <div>
-      <div
-        onClick={handleClick}
-        style={{ display: "flex", alignItems: "center" }}
-      >
+      <div onClick={handleClick} style={{ display: 'flex', alignItems: 'center' }}>
         {children}
       </div>
       <Popover
@@ -31,12 +27,12 @@ export default function EventSettingPopOver({ children, eventType }) {
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "top",
-          horizontal: "left",
+          vertical: 'top',
+          horizontal: 'left',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
       >
         <EventCardSeeting eventType={eventType} handleClose={handleClose} />

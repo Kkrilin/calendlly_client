@@ -1,35 +1,34 @@
-import { Button } from "@mui/material";
-import { Link } from "react-router-dom";
-import CreateEventPopOver from "../Utils/PopOver/CreateEventPopOver";
+import { Link } from 'react-router-dom';
+import CreateEventPopOver from '../Utils/PopOver/CreateEventPopOver';
 
 const LeftSideBar = () => {
   return (
     <div className="left_sidebar">
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "2.5rem",
-          height: "15vh",
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '2.5rem',
+          height: '15vh',
         }}
       >
-        <Link className="header_logo" to="/user/event_type">
+        <Link className="header_logo" to="/user/event-type">
           <img
             className="logo"
             decoding="async"
             loading="eager"
             src="https://images.ctfassets.net/9haz2glq4wt0/3u3bSJcxg7Yk8RKpbO5Ygc/039d9e7e9a490b9ce006ba4f107c1da1/Calendly_Logo.webp?h=256&fm=webp&fit=pad&w=256&q=100"
             alt=""
-            style={{ width: "40px", height: "40px" }}
+            style={{ width: '40px', height: '40px' }}
           />
           <h4
             style={{
-              cursor: "pointer",
-              color: "rgb(0, 107, 255)",
-              fontSize: "1.8rem",
-              fontWeight: "400",
+              cursor: 'pointer',
+              color: 'rgb(0, 107, 255)',
+              fontSize: '1.8rem',
+              fontWeight: '400',
             }}
           >
             Calendlly
@@ -43,18 +42,18 @@ const LeftSideBar = () => {
       </div>
       <div
         style={{
-          width: "98%",
-          height: "85vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          alignItems: "start",
-          marginLeft: "4px",
+          width: '98%',
+          height: '85vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          alignItems: 'start',
+          marginLeft: '4px',
         }}
       >
         <div>
-          <div style={{ borderBottom: "1px solid #e7f1ff" }}>
-            <Link to="event_type">
+          <div style={{ borderBottom: '1px solid #e7f1ff' }}>
+            <Link to="event-type">
               <h3>Event Types</h3>
             </Link>
             <Link to="meeting">
@@ -71,7 +70,7 @@ const LeftSideBar = () => {
             <h3>Routings</h3>
           </div>
         </div>
-        <div style={{ width: "100%", marginBottom: "1rem" }}>
+        <div style={{ width: '100%', marginBottom: '1rem' }}>
           <h3>Upgrade Plan</h3>
           <h3>Analytics</h3>
           <h3>Admin center</h3>
