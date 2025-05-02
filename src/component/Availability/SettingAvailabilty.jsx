@@ -2,6 +2,7 @@ import StartAndEndTime from './StartAndEndTime';
 import { weekDays } from '../../utils';
 import { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
+import Loader from '../Loader/CircularLoader.jsx';
 import { availabilityBaseUrl, header } from '../../api';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -9,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 const SettingAvailabilty = () => {
   const [availabilities, setAvailabilities] = useState([]);
+  const [loading, setLoading] = useState(true);
   const token = localStorage.getItem('token');
   const [availabilityError, setAvailablityError] = useState(false);
   header.headers.Authorization = `Bearer ${token}`;
@@ -32,6 +34,28 @@ const SettingAvailabilty = () => {
       })
       .catch((error) => console.log(error));
   };
+
+  useEffect(() => {
+    setLoading(true);
+    axios
+      .get(availabilityBaseUrl, header)
+      .then((res) => {
+        if (res.data.availability.length) {
+          setLoading(false);
+          navigate('/user/event-type', { replace: true });
+        }
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center' }}>
