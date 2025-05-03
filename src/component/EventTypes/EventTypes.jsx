@@ -75,7 +75,7 @@ const EventTypes = () => {
           ))}
         </div>
       )}
-      {!events.length && (
+      {!events.length && !loading && (
         <div
           style={{
             display: 'flex',

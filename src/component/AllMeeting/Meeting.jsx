@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { format12Hour } from '../../utils';
 import { bookingBaseUrl, header } from '../../api';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const Meeting = ({ meeting, setAllMeetings, date }) => {
   const handleMeetingCancel = () => {

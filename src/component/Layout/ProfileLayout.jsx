@@ -14,7 +14,6 @@ function ProfileLayout() {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   header.headers.Authorization = `Bearer ${token}`;
-  console.log(header, 'profileLaylout');
   useEffect(() => {
     axios
       .get(availabilityBaseUrl, header)
