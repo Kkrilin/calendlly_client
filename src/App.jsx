@@ -34,7 +34,14 @@ function App() {
           <Route path="signup" element={<SignupPage />} />
           <Route path="login" element={<LoginPage />} />
         </Route>
-        <Route path="/setting/availabilty" element={<SettingAvailabilty />} />
+        <Route
+          path="/setting/availabilty"
+          element={
+            <ProtectedRoute>
+              <SettingAvailabilty />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/user"
           element={
