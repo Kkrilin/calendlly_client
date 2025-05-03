@@ -12,6 +12,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [open, setOpen] = useState(false);
+  const [googleOpen, setGoogleOpen] = useState(false);
 
   const payload = {
     email,
@@ -51,7 +52,7 @@ const LoginPage = () => {
     prompt: 'consent',
     onSuccess: async ({ code }) => {
       try {
-        setOpen(true);
+        setGoogleOpen(true);
         const res = await axios.post(googleAuthUrl, { code });
         localStorage.setItem('token', res.data.token);
         navigate('/user/event-type');
@@ -59,7 +60,7 @@ const LoginPage = () => {
         toast.error(error.response.data.message);
         setError(error.message);
       } finally {
-        setOpen(false);
+        setGoogleOpen(false);
       }
     },
     onError: (error) => setError(error.message),
@@ -165,7 +166,7 @@ const LoginPage = () => {
             >
               <p className="before_after">OR</p>
             </div>
-            <BackDropLoader open={open}>
+            <BackDropLoader open={googleOpen}>
               <button
                 onClick={handleGoogleAuth}
                 className="google_button"

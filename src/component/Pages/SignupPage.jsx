@@ -6,6 +6,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 
 import { toast } from 'react-hot-toast';
 import { googleAuthUrl, signUpUrl } from '../../api';
+import BackDropLoader from '../Utils/Loader/BackDropLoader';
 
 const SignupPage = () => {
   const [name, setName] = useState('');
@@ -13,6 +14,8 @@ const SignupPage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [googleOpen, setGoogleOpen] = useState(false);
 
   const payload = {
     name,
@@ -31,7 +34,7 @@ const SignupPage = () => {
       setError('error in the signup');
       return;
     }
-
+    setOpen(true);
     try {
       const signUpRes = await axios.post(signUpUrl, payload);
       localStorage.setItem('token', signUpRes.data.token);
@@ -39,6 +42,8 @@ const SignupPage = () => {
     } catch (error) {
       setError(error.response?.data?.message);
       toast.error(error.response?.data?.message);
+    } finally {
+      setOpen(false);
     }
   };
 
@@ -49,6 +54,7 @@ const SignupPage = () => {
     prompt: 'consent',
     onSuccess: async ({ code }) => {
       console.log('code', code);
+      setGoogleOpen(true);
       try {
         const res = await axios.post(googleAuthUrl, { code });
         localStorage.setItem('token', res.data.token);
@@ -57,6 +63,8 @@ const SignupPage = () => {
         toast.error(error.response.data.message);
 
         setError(error.message);
+      } finally {
+        setGoogleOpen(false);
       }
     },
     onError: (error) => setError(error.message),
@@ -150,22 +158,24 @@ const SignupPage = () => {
                 placeholder="Enter your password"
               ></input>
             </div>
-            <button
-              className="google_button"
-              style={{
-                fontSize: '1.2rem',
-                fontWeight: '500',
-                padding: '1rem 40%',
-                textAlign: 'center',
-                width: '100%',
-                margin: '20px 0',
-                display: 'grid',
-                placeItems: 'center',
-              }}
-              type="submit"
-            >
-              <span>Sign up</span>
-            </button>
+            <BackDropLoader open={open}>
+              <button
+                className="google_button"
+                style={{
+                  fontSize: '1.2rem',
+                  fontWeight: '500',
+                  padding: '1rem 40%',
+                  textAlign: 'center',
+                  width: '100%',
+                  margin: '20px 0',
+                  display: 'grid',
+                  placeItems: 'center',
+                }}
+                type="submit"
+              >
+                <span>Sign up</span>
+              </button>
+            </BackDropLoader>
           </form>
           <div
             style={{
@@ -195,24 +205,27 @@ const SignupPage = () => {
             >
               Easily connect your calender by signing up with your Google{' '}
             </p>
-            <button
-              onClick={handleGoogleAuth}
-              className="google_button"
-              style={{ margin: '20px auto' }}
-            >
-              <span>
-                <img src="https://calendly.com/media/googleLogo.svg" alt="" />
-              </span>
-              <span
-                style={{
-                  fontSize: '1.2rem',
-                  marginRight: '15px',
-                  fontWeight: '500',
-                }}
+            <BackDropLoader open={googleOpen}>
+              <button
+                onClick={handleGoogleAuth}
+                className="google_button"
+                style={{ margin: '20px auto' }}
               >
-                Sign up with Google
-              </span>
-            </button>
+                <span>
+                  <img src="https://calendly.com/media/googleLogo.svg" alt="" />
+                </span>
+                <span
+                  style={{
+                    fontSize: '1.2rem',
+                    marginRight: '15px',
+                    fontWeight: '500',
+                  }}
+                >
+                  Sign up with Google
+                </span>
+              </button>
+            </BackDropLoader>
+
             <Link
               to="/login"
               style={{
