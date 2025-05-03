@@ -7,6 +7,15 @@ export const header = {
     'Content-Type': 'application/json',
   },
 };
+
+export const getHeader = (token) => {
+  return {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
 export const loginUrl = `${serverBaseUrl}/auth/login`;
 export const signUpUrl = `${serverBaseUrl}/auth/signup`;
 export const googleAuthUrl = `${serverBaseUrl}/auth/google`;

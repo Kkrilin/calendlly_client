@@ -17,11 +17,9 @@ const LandingPage = () => {
     access_type: 'offline',
     prompt: 'consent',
     onSuccess: async ({ code }) => {
-      console.log('code', code);
       setOpen(true);
       try {
         const res = await axios.post(googleAuthUrl, { code });
-        console.log('token', res.data.token);
         localStorage.setItem('token', res.data.token);
         navigate('/user/event-type');
       } catch (error) {

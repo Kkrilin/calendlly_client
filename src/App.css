@@ -454,10 +454,8 @@ select {
 .one_event {
   display: flex;
   justify-content: space-between;
-  /* align-items: center; */
-  /* width: 70vw; */
   height: 75vh;
-  /* padding: 4rem; */
+  min-width: 52rem;
   gap: 1rem;
   box-shadow:
     rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
@@ -524,6 +522,16 @@ select {
 .email {
   color: #000000;
   font-weight: 500;
+}
+.required {
+  position: relative;
+}
+
+.required::after {
+  content: '*';
+  color: red;
+  position: absolute;
+  top: -2px;
 }
 
 .delete_res {

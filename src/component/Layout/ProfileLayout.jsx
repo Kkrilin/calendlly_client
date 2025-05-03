@@ -6,13 +6,14 @@ import { availabilityBaseUrl, header } from '../../api.js';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Loader from '../Loader/CircularLoader.jsx';
+import toast from 'react-hot-toast';
 
 function ProfileLayout() {
-  const [isAvailabilityExist, setIsAvailabilityExist] = useState(false);
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   header.headers.Authorization = `Bearer ${token}`;
+  console.log(header, 'profileLaylout');
   useEffect(() => {
     axios
       .get(availabilityBaseUrl, header)
@@ -24,11 +25,14 @@ function ProfileLayout() {
         }
       })
       .catch((error) => {
-        setError(error.response.data.message);
+        toast.error(error.response?.data?.message);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
-  if (!isAvailabilityExist) {
+  if (loading) {
     return <Loader />;
   }
 

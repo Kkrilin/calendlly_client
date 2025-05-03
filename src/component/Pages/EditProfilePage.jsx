@@ -32,7 +32,6 @@ const EditProfilePage = () => {
           toast.success('changes saved');
         })
         .catch((error) => toast.error('something wen wrong'));
-      console.log('Saving changes:', formData[fieldName]);
     }
     setEdit((prevState) => !prevState);
     setField(fieldName);

@@ -19,7 +19,7 @@ const CreateEventType = ({ handleClose }) => {
     }
     setEventName(e.target.value);
   };
-
+  console.log(header, 'header');
   const handleEventSubmit = async () => {
     if (!eventName) {
       setError(`event name can't be empty`);

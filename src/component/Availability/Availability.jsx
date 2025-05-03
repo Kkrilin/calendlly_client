@@ -6,13 +6,10 @@ import axios from 'axios';
 const Availability = () => {
   const [availabilities, setAvailabilities] = useState([]);
 
-  const token = localStorage.getItem('token');
-  header.headers.Authorization = `Bearer ${token}`;
   useEffect(() => {
     axios
       .get(availabilityBaseUrl, header)
       .then((res) => {
-        console.log('res.data.availability', res.data.availability);
         setAvailabilities(res.data.availability);
       })
       .catch((error) => console.log(error));

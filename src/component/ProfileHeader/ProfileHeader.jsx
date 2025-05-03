@@ -4,24 +4,18 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useDispatch, useSelector } from 'react-redux';
 import LogoutPopOver from '../Utils/PopOver/LogoutPopOver';
 import { useEffect } from 'react';
-import { getUserUrl } from '../../api';
+import { header, getUserUrl } from '../../api';
 import { setProfileData } from '../../redux/profileSlice';
 
 const ProfileHeader = () => {
   const { data } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
-  const token = localStorage.getItem('token');
 
   useEffect(() => {
     try {
       if (data && !Object.keys(data).length) {
         async function getUser() {
-          const user = await axios.get(getUserUrl, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          console.log(user);
+          const user = await axios.get(getUserUrl, header);
           dispatch(setProfileData({ data: user.data.userData }));
         }
         getUser();

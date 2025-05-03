@@ -8,7 +8,7 @@ import EventSettingPopOver from '../Utils/PopOver/EventSettingPopOver';
 
 const { clientBaseUrl } = config;
 
-const EventTypeCard = ({ eventType }) => {
+const EventTypeCard = ({ eventType, publicCard }) => {
   const handleCopy = () => {
     const url = `${clientBaseUrl}/book/event/${eventType.userId}/${eventType.id}`;
     navigator.clipboard
@@ -23,25 +23,26 @@ const EventTypeCard = ({ eventType }) => {
   return (
     <div className="event_card_container">
       <div>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            padding: '1rem',
-          }}
-        >
-          <input id={eventType.id} type="checkbox" />
-          <EventSettingPopOver eventType={eventType}>
-            <SettingsIcon style={{ width: '1rem', height: '1rem' }} />
-            <ArrowDropDownIcon />
-          </EventSettingPopOver>
-        </div>
+        {!publicCard && (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              padding: '1rem',
+            }}
+          >
+            <input id={eventType.id} type="checkbox" />
+            <EventSettingPopOver eventType={eventType}>
+              <SettingsIcon style={{ width: '1rem', height: '1rem' }} />
+              <ArrowDropDownIcon />
+            </EventSettingPopOver>
+          </div>
+        )}
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
             gap: '0.5rem',
-            // padding: "10px 0",
             padding: '0 0 1rem 1rem',
             borderBottom: '1px solid #e7f1ff',
           }}

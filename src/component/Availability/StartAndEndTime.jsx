@@ -39,6 +39,7 @@ const StartAndEndTime = ({
     }
     return false;
   };
+
   useEffect(() => {
     if (toSeconds(startTime) > toSeconds(endTime)) {
       setError('startTime is large');
@@ -51,9 +52,6 @@ const StartAndEndTime = ({
       setError('');
     }
   }, []);
-
-  const token = localStorage.getItem('token');
-  header.headers.Authorization = `Bearer ${token}`;
 
   const handleStartTimeChange = (e) => {
     setStartTime(e.target.value);
@@ -96,6 +94,7 @@ const StartAndEndTime = ({
         toast.error(error.messages);
       });
   };
+
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center' }}>

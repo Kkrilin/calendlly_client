@@ -12,7 +12,6 @@ const profileSlice = createSlice({
   initialState,
   reducers: {
     setProfileData(state, action) {
-      console.log(action.payload, 'action.payload');
       state.login = true;
       state.data = action.payload.data || {};
       state.loading = false;

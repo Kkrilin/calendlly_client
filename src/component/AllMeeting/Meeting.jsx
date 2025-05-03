@@ -6,13 +6,11 @@ import { bookingBaseUrl, header } from '../../api';
 import axios from 'axios';
 
 const Meeting = ({ meeting, setAllMeetings, date }) => {
-  const token = localStorage.getItem('token');
-  header.headers.Authorization = `Bearer ${token}`;
   const handleMeetingCancel = () => {
     axios
       .delete(`${bookingBaseUrl}/${meeting.id}`, header)
       .then((res) => {
-        toast.success('metting canceled');
+        toast.success('meeting canceled');
         setAllMeetings((prvState) => {
           const AllMeeting = { ...prvState };
           const filteredMeeting = AllMeeting[date].filter((meet) => meet.id !== meeting.id);
@@ -32,6 +30,7 @@ const Meeting = ({ meeting, setAllMeetings, date }) => {
         toast.error(error.message);
       });
   };
+
   return (
     <div className="meeting_card" style={{ padding: '1rem 0 1rem 2.5rem' }}>
       <div>
@@ -56,13 +55,11 @@ const Meeting = ({ meeting, setAllMeetings, date }) => {
             {meeting.guest_email}
           </h3>
         </div>
-        {meeting.rescheduleReason ? (
+        {meeting.rescheduleReason && (
           <div>
             <p>rescheduleReason: {meeting.rescheduleReason}</p>
             <p>rescheduleBy: {meeting.rescheduleBy}</p>
           </div>
-        ) : (
-          ''
         )}
         <div>
           <h3 style={{ fontWeight: '400' }}>

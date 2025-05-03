@@ -1,18 +1,12 @@
 import { useParams } from 'react-router-dom';
-import MyCalendar from '../MyCalendar/MyCalendar';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import {
-  availabilityBaseUrl,
-  header,
-  getTimeSlotsUrl,
-  resheduleBookingUrl,
-} from '../../api';
 import toast from 'react-hot-toast';
-
 import moment from 'moment-timezone';
-import BookEventPopOver from '../Utils/PopOver/BookEventPopOver';
+import { header, getTimeSlotsUrl, resheduleBookingUrl } from '../../api';
+import MyCalendar from '../MyCalendar/MyCalendar';
 import { format12Hour } from '../../utils';
+import TimeSlot from './TimeSlot';
 
 const RescheduleBooking = () => {
   const [availabilities, setAvailabilities] = useState([]);
@@ -23,24 +17,13 @@ const RescheduleBooking = () => {
   const [bookingResponse, setBookingResponse] = useState(null);
   const params = useParams();
   const formerTimeSlot = format12Hour(new Date(booking.start_time));
-  const token = localStorage.getItem('token');
-  useEffect(() => {
-    header.headers.Authorization = `Bearer ${token}`;
-    axios
-      .get(availabilityBaseUrl, header)
-      .then((res) => {
-        console.log('res.data.availability', res.data.availability);
-        setAvailabilities(res.data.availability);
-      })
-      .catch((error) => console.log(error));
-  }, []);
 
   useEffect(() => {
     axios
       .get(`${resheduleBookingUrl}/${params.bookingId}`, header)
       .then((res) => {
-        console.log('res.data', res.data);
         setBooking(res.data.booking);
+        setAvailabilities(res.data.availabilities);
       })
       .catch((error) => {
         toast.error(error.message);
@@ -120,28 +103,6 @@ const RescheduleBooking = () => {
             <span> - </span>
             <span className="time">{format12Hour(new Date(booking.end_time))}</span>
           </div>
-          {/* <label
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              gap: "6px",
-              marginBottom: "16px",
-            }}
-            htmlFor="duration"
-          >
-            Duration
-            <select
-              onChange={(e) => setDuration(e.target.value)}
-              id="duration"
-              className="select_option"
-              defaultValue={`${duration} min`}
-            >
-              <option value="15">15 min</option>
-              <option value="30">30 min</option>
-              <option value="60">60 min</option>
-            </select>
-          </label> */}
         </div>
         <div style={{ padding: '2rem' }}>
           <h3 style={{}}>Select date and Time</h3>
@@ -164,7 +125,6 @@ const RescheduleBooking = () => {
             {date && (
               <div>
                 {date && <p>{date.toDateString()}</p>}
-                {/* <h1>{date.getDay()}</h1> */}
                 <div
                   style={{
                     overflowY: 'auto',
@@ -176,7 +136,7 @@ const RescheduleBooking = () => {
                   <div style={{ width: '14rem' }}>
                     {timeSlots.length ? (
                       timeSlots.map((timeSlot, id) => (
-                        <Time
+                        <TimeSlot
                           key={id}
                           timeSlot={timeSlot}
                           setBookTime={setBookTime}
@@ -197,54 +157,6 @@ const RescheduleBooking = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
-};
-
-const Time = ({
-  timeSlot,
-  bookTime,
-  setBookTime,
-  date,
-  setBookingResponse,
-  formerTimeSlot,
-  reschedule,
-}) => {
-  return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '1rem',
-      }}
-    >
-      <span
-        className="book_time"
-        style={{
-          backgroundColor: `${bookTime === timeSlot ? 'grey' : 'white'}`,
-          width: `${bookTime === timeSlot ? '6.5rem' : '14rem'}`,
-          color: `${bookTime === timeSlot ? 'white' : '#0066e6'}`,
-        }}
-        onClick={(e) => setBookTime(e.target.innerText)}
-      >
-        {timeSlot}
-        {formerTimeSlot === timeSlot ? (
-          <p style={{ fontSize: '12px', color: 'blueviolet' }}>(older slot)</p>
-        ) : (
-          ''
-        )}
-      </span>
-      {bookTime === timeSlot && (
-        <BookEventPopOver
-          setBookingResponse={setBookingResponse}
-          bookTime={bookTime}
-          bookDate={date}
-          reschedule={reschedule}
-        >
-          next
-        </BookEventPopOver>
-      )}
     </div>
   );
 };

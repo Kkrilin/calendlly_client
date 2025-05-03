@@ -17,9 +17,6 @@ const EventTypes = () => {
   const { data } = useSelector((state) => state.profile);
   const { events } = useSelector((state) => state.eventType);
   const dispatch = useDispatch();
-  const token = localStorage.getItem('token');
-  header.headers.Authorization = `Bearer ${token}`;
-  console.log('header------------------', header);
   useEffect(() => {
     setLoading(true);
     axios
@@ -48,10 +45,7 @@ const EventTypes = () => {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-          <Avatar
-            sx={{ width: 40, height: 40 }}
-            alt="profile logo"
-          >
+          <Avatar sx={{ width: 40, height: 40 }} alt="profile logo">
             K
           </Avatar>
           <div>
@@ -64,9 +58,7 @@ const EventTypes = () => {
             >{`${config.clientBaseUrl}/book/event/${data.id}`}</Link>
           </div>
         </div>
-        <CreateEventPopOver>
-          new event type
-        </CreateEventPopOver>
+        <CreateEventPopOver>new event type</CreateEventPopOver>
       </div>
       {loading && <Loader />}
       {!loading && (

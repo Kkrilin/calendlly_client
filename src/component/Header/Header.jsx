@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom';
 const Header = () => {
   return (
     <header>
-      {/* <div></div> */}
       <nav>
         <div>
           <Link className="header_logo" to="/">

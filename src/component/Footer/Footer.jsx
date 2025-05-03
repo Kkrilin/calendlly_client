@@ -18,7 +18,6 @@ const Footer = () => {
                 maxWidth: '400px',
                 display: 'flex',
                 flexDirection: 'column',
-                // gap: "20px",
               }}
             >
               <h3

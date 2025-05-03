@@ -1,14 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { eventLookUpUrl, header } from '../../api';
-import Loader from '../Loader/CircularLoader';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-
+import { useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
-import { config } from '../../config';
-
-const clientBaseUrl = config.clientBaseUrl;
+import { eventLookUpUrl, header } from '../../api';
+import Loader from '../Loader/CircularLoader';
+import EventTypeCard from '../EventTypes/EventTypeCard';
 
 const AllEvent = () => {
   const [events, setEvents] = useState([]);
@@ -50,63 +46,9 @@ const AllEvent = () => {
             padding: '2rem 2rem',
           }}
         >
-          {events.length && events.map((et) => <EventTypeCard eventType={et} key={et.id} public />)}
+          {events.length &&
+            events.map((et) => <EventTypeCard eventType={et} key={et.id} publicCard />)}
           {!events.length && <h3>there is no event</h3>}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const EventTypeCard = ({ eventType }) => {
-  const handleCopy = () => {
-    const url = `${clientBaseUrl}/book/event/${eventType.userId}/${eventType.id}`;
-    navigator.clipboard
-      .writeText(url)
-      .then(() => {
-        toast.success('Copied to clipboard!');
-      })
-      .catch((err) => {
-        toast.error('Failed to copy: ', err.message);
-      });
-  };
-  return (
-    <div className="event_card_container">
-      <div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '0.5rem',
-            // padding: "10px 0",
-            padding: '0 0 1rem 1rem',
-            borderBottom: '1px solid #e7f1ff',
-          }}
-        >
-          <h4 style={{ fontWeight: '400' }}>{eventType.title}</h4>
-          <span style={{ fontWeight: '400', color: 'rgb(78, 108, 150)' }}>
-            {eventType.durationMinutes} min
-          </span>
-          <Link
-            to={`/book/event/${eventType.userId}/${eventType.id}`}
-            target="_blank"
-            className="booking_page"
-          >
-            View booking page
-          </Link>
-        </div>
-        <div
-          style={{
-            color: 'blue',
-            display: 'flex',
-            fontWeight: '400',
-            cursor: 'pointer',
-            padding: '1rem',
-          }}
-          onClick={handleCopy}
-        >
-          <ContentCopyIcon style={{ width: '1rem', height: '1rem' }} />
-          <h4 style={{ fontSize: '0.875rem', fontWeight: '400' }}>Copy link</h4>
         </div>
       </div>
     </div>

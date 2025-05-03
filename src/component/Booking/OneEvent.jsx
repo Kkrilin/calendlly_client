@@ -4,39 +4,30 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import moment from 'moment';
-import BookEventPopOver from '../Utils/PopOver/BookEventPopOver';
-import { availabilityBaseUrl, header, eventLookUpUrl, getTimeSlotsUrl } from '../../api';
+import { header, eventLookUpUrl, getTimeSlotsUrl } from '../../api';
+import TimeSlot from './TimeSlot';
 
 const OneEvent = () => {
   const [availabilities, setAvailabilities] = useState([]);
   const [eventType, setEventType] = useState({});
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState();
   const [bookTime, setBookTime] = useState('');
   const [timeSlots, setTimeSlots] = useState([]);
   const [bookingResponse, setBookingResponse] = useState(null);
   const params = useParams();
-  const token = localStorage.getItem('token');
-  useEffect(() => {
-    header.headers.Authorization = `Bearer ${token}`;
-    axios
-      .get(availabilityBaseUrl, header)
-      .then((res) => {
-        console.log('res.data.availability', res.data.availability);
-        setAvailabilities(res.data.availability);
-      })
-      .catch((error) => console.log(error));
-  }, []);
 
   useEffect(() => {
     axios
       .get(`${eventLookUpUrl}/${params.userId}/${params.eventId}`, header)
       .then((res) => {
         setEventType(res.data.eventType);
+        setAvailabilities(res.data.availabilities);
       })
       .catch((error) => {
         toast.error(error.message);
       });
   }, []);
+
   useEffect(() => {
     if (date) {
       header.params = {
@@ -75,7 +66,7 @@ const OneEvent = () => {
       <div className="one_event">
         <div
           style={{
-            width: '30%',
+            width: '50%',
             borderRight: '1px solid grey',
             padding: '2rem',
             display: 'flex',
@@ -83,37 +74,18 @@ const OneEvent = () => {
             gap: '1rem',
           }}
         >
-          <h4>{eventType.User?.name}</h4>
+          <h4 style={{ color: 'blue', fontSize: '1.2rem' }}>{eventType.User?.name}</h4>
           <h4>
-            <span>EventType: </span>
-            <span className="name">{eventType.title} </span>
+            <span style={{ fontSize: '1.3rem', color: 'grey' }}>EventType : </span>
+            <span style={{ textTransform: 'capitalize' }} className="name">
+              {eventType.title}
+            </span>
           </h4>
           <h5>
-            <span>Event Duration(minutes): </span>
-            <span className="name">{eventType.durationMinutes} </span>
+            <span style={{ fontSize: '1.3rem', color: 'grey' }}>Event Duration</span>
+            <span>(minutes) :</span>
+            <span className="name"> {eventType.durationMinutes} </span>
           </h5>
-          {/* <label
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              gap: "6px",
-              marginBottom: "16px",
-            }}
-            htmlFor="duration"
-          >
-            Duration
-            <select
-              onChange={(e) => setDuration(e.target.value)}
-              id="duration"
-              className="select_option"
-              defaultValue={`${duration} min`}
-            >
-              <option value="15">15 min</option>
-              <option value="30">30 min</option>
-              <option value="60">60 min</option>
-            </select>
-          </label> */}
         </div>
         <div style={{ padding: '2rem' }}>
           <h3 style={{}}>Select date and Time</h3>
@@ -135,8 +107,9 @@ const OneEvent = () => {
             </div>
             {date && (
               <div>
-                {date && <p>{date.toDateString()}</p>}
-                {/* <h1>{date.getDay()}</h1> */}
+                {date && (
+                  <p style={{ textAlign: 'center', width: '14rem' }}>{date.toDateString()}</p>
+                )}
                 <div
                   style={{
                     overflowY: 'auto',
@@ -148,7 +121,7 @@ const OneEvent = () => {
                   <div style={{ width: '14rem' }}>
                     {timeSlots.length ? (
                       timeSlots.map((timeSlot, id) => (
-                        <Time
+                        <TimeSlot
                           key={id}
                           timeSlot={timeSlot}
                           setBookTime={setBookTime}
@@ -167,40 +140,6 @@ const OneEvent = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
-};
-
-const Time = ({ timeSlot, bookTime, setBookTime, date, setBookingResponse }) => {
-  return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: '1rem',
-      }}
-    >
-      <span
-        className="book_time"
-        style={{
-          backgroundColor: `${bookTime === timeSlot ? 'grey' : 'white'}`,
-          width: `${bookTime === timeSlot ? '6.5rem' : '14rem'}`,
-          color: `${bookTime === timeSlot ? 'white' : '#0066e6'}`,
-        }}
-        onClick={(e) => setBookTime(e.target.innerText)}
-      >
-        {timeSlot}
-      </span>
-      {bookTime === timeSlot && (
-        <BookEventPopOver
-          setBookingResponse={setBookingResponse}
-          bookTime={bookTime}
-          bookDate={date}
-        >
-          next
-        </BookEventPopOver>
-      )}
     </div>
   );
 };

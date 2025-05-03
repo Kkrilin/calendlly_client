@@ -10,15 +10,11 @@ import axios from 'axios';
 const EventCardSeeting = ({ eventType, handleClose }) => {
   const dispatch = useDispatch();
 
-  const token = localStorage.getItem('token');
-  header.headers.Authorization = `Bearer ${token}`;
-
   const deleteEventUrl = `${eventBaseUrl}/${eventType.id}`;
   const handleDelete = () => {
     axios
       .delete(deleteEventUrl, header)
       .then((res) => {
-        console.log(res);
         toast.success(res.data.message);
         dispatch(removeEventType({ id: eventType.id }));
       })

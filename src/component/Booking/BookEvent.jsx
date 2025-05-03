@@ -25,7 +25,6 @@ const BookEvent = ({ handleClose, bookTime, bookDate, setBookingResponse, resche
     bookDate,
     bookTime,
   };
-  console.log('reschedule');
   if (reschedule) {
     payload.rescheduleReason = rescheduleReason;
   } else {
@@ -33,7 +32,6 @@ const BookEvent = ({ handleClose, bookTime, bookDate, setBookingResponse, resche
     payload.guestEmail = guestEmail;
   }
 
-  console.log('payload', payload);
   const bookingUrl = `${eventBookingUrl}/${userId}/${eventId}`;
   const reshceduleUrl = `${resheduleBookingUrl}/${bookingId}`;
   const url = reschedule ? reshceduleUrl : bookingUrl;
@@ -61,9 +59,19 @@ const BookEvent = ({ handleClose, bookTime, bookDate, setBookingResponse, resche
   };
 
   return (
-    <div style={{ width: '30rem', height: '20rem' }}>
+    <div style={{ width: '30rem', height: '24rem' }}>
       <div style={{ padding: '1rem' }}>
         <h3>Enter Details</h3>
+        <div style={{ display: 'flex', gap: '1rem', padding: '1rem 0' }}>
+          <div>
+            <span style={{ fontSize: '1.2rem' }}>Event Date : </span>
+            <span style={{ color: '#0066E6' }}>{bookDate}</span>
+          </div>
+          <div>
+            <span style={{ fontSize: '1.2rem' }}>Event Time : </span>
+            <span style={{ color: '#0066E6' }}>{bookTime}</span>
+          </div>
+        </div>
         <form>
           {reschedule ? (
             <>
@@ -87,9 +95,7 @@ const BookEvent = ({ handleClose, bookTime, bookDate, setBookingResponse, resche
                 }}
                 htmlFor="name"
               >
-                <span>
-                  name <sup>*</sup>
-                </span>
+                <span className="required">name</span>
                 <input
                   type="text"
                   id="name"
@@ -99,6 +105,8 @@ const BookEvent = ({ handleClose, bookTime, bookDate, setBookingResponse, resche
                     height: '2.5rem',
                     borderRadius: '6px',
                     border: '1px solid blue',
+                    paddingLeft: '1rem',
+                    fontSize: '1rem',
                   }}
                   placeholder="Enter your name"
                 />
@@ -112,9 +120,7 @@ const BookEvent = ({ handleClose, bookTime, bookDate, setBookingResponse, resche
                 }}
                 htmlFor="email"
               >
-                <span>
-                  email <sup>*</sup>
-                </span>
+                <span className="required">email</span>
                 <input
                   type="email"
                   id="name"
@@ -124,6 +130,8 @@ const BookEvent = ({ handleClose, bookTime, bookDate, setBookingResponse, resche
                     height: '2.5rem',
                     borderRadius: '6px',
                     border: '1px solid blue',
+                    paddingLeft: '1rem',
+                    fontSize: '1rem',
                   }}
                   placeholder="Enter your email"
                 />
@@ -132,11 +140,13 @@ const BookEvent = ({ handleClose, bookTime, bookDate, setBookingResponse, resche
             </>
           )}
         </form>
-        <BackDropLoader open={open}>
-          <Button onClick={HandleBooking} variant="contained">
-            {reschedule ? 'update Event' : 'Schedule Event'}
-          </Button>
-        </BackDropLoader>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '2rem' }}>
+          <BackDropLoader open={open}>
+            <Button onClick={HandleBooking} variant="contained">
+              {reschedule ? 'update Event' : 'Schedule Event'}
+            </Button>
+          </BackDropLoader>
+        </div>
       </div>
     </div>
   );

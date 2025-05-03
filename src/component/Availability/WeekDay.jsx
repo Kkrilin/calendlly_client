@@ -1,21 +1,16 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 import StartAndEndTime from './StartAndEndTime';
 import { dayOfWeeks } from '../../utils';
 import { availabilityBaseUrl, header } from '../../api';
-import axios from 'axios';
-import toast from 'react-hot-toast';
 
 const WeekDay = ({ avail }) => {
   const [startTime, setStartTime] = useState('09:00 am');
   const [endTime, setEndTime] = useState('05:00 pm');
   const [checked, setChecked] = useState(false);
   const [error, setError] = useState('');
-  const token = localStorage.getItem('token');
-  header.headers.Authorization = `Bearer ${token}`;
-
   useEffect(() => {
-    console.log(avail, 'availabiliteis');
-    console.log('avail?.start_time', avail?.start_time);
     const [startHours, startMinute] = avail?.start_time?.split(':');
     const [endHours, endMinute] = avail?.end_time?.split(':');
 

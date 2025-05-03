@@ -37,7 +37,6 @@ const LoginPage = () => {
       navigate('/user/event-type');
     } catch (error) {
       setError(error.message);
-      console.log(error);
       toast.error(error.response.data.message);
     } finally {
       setOpen(false);
@@ -51,7 +50,6 @@ const LoginPage = () => {
     access_type: 'offline',
     prompt: 'consent',
     onSuccess: async ({ code }) => {
-      console.log('code', code);
       try {
         setOpen(true);
         const res = await axios.post(googleAuthUrl, { code });
@@ -195,7 +193,7 @@ const LoginPage = () => {
                 gap: '10px',
               }}
             >
-              <span>Don't have an account?</span>
+              <span>Don&apos;t have an account?</span>
               <span>
                 <Link to="/signup" style={{ color: 'blue' }}>
                   Sign up for free
