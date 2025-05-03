@@ -1,29 +1,10 @@
-import axios from 'axios';
 import { Avatar } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import LogoutPopOver from '../Utils/PopOver/LogoutPopOver';
-import { useEffect } from 'react';
-import { header, getUserUrl } from '../../api';
-import { setProfileData } from '../../redux/profileSlice';
 
 const ProfileHeader = () => {
   const { data } = useSelector((state) => state.profile);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    try {
-      if (data && !Object.keys(data).length) {
-        async function getUser() {
-          const user = await axios.get(getUserUrl, header);
-          dispatch(setProfileData({ data: user.data.userData }));
-        }
-        getUser();
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
 
   return (
     <>

@@ -2,16 +2,19 @@ import { useEffect, useState } from 'react';
 import LeftSideBar from '../LeftSidebar/LeftSideBar.jsx';
 import ProfileHeader from '../ProfileHeader/ProfileHeader.jsx';
 import { Outlet } from 'react-router-dom';
-import { availabilityBaseUrl, header } from '../../api.js';
+import { availabilityBaseUrl, getUserUrl, header } from '../../api.js';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Loader from '../Loader/CircularLoader.jsx';
 import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { setProfileData } from '../../redux/profileSlice.js';
 
 function ProfileLayout() {
   const [loading, setLoading] = useState(true);
   const [isAvailabilityExit, setIsAvailabilityExist] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const token = localStorage.getItem('token');
   header.headers.Authorization = `Bearer ${token}`;
   useEffect(() => {
@@ -25,12 +28,24 @@ function ProfileLayout() {
         }
       })
       .catch((error) => {
-        console.log('111111111111111');
         toast.error(error.response.data.message);
       })
       .finally(() => {
         setLoading(false);
       });
+  }, []);
+
+  useEffect(() => {
+    try {
+      async function getUser() {
+        const user = await axios.get(getUserUrl, header);
+        dispatch(setProfileData({ data: user.data.userData }));
+      }
+      getUser();
+    } catch (err) {
+      console.log(err);
+    }
+    return () => dispatch(setProfileData({ data: {} }));
   }, []);
 
   if (loading) {
