@@ -416,7 +416,7 @@ select {
 .booking_page {
   color: rgb(82, 82, 230);
   font-weight: 400;
-  width: max-contentff;
+  width: max-content;
 }
 
 .booking_page:hover {
