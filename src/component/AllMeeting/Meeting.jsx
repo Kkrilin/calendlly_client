@@ -8,27 +8,29 @@ import toast from 'react-hot-toast';
 
 const Meeting = ({ meeting, setAllMeetings, date }) => {
   const handleMeetingCancel = () => {
+    const toastId = toast.loading('Cancelling meeting...');
+
     axios
       .delete(`${bookingBaseUrl}/${meeting.id}`, header)
-      .then((res) => {
-        toast.success('meeting canceled');
-        setAllMeetings((prvState) => {
-          const AllMeeting = { ...prvState };
-          const filteredMeeting = AllMeeting[date].filter((meet) => meet.id !== meeting.id);
-          if (!filteredMeeting.length) {
-            delete AllMeeting[date];
-            return {
-              ...AllMeeting,
-            };
+      .then(() => {
+        setAllMeetings((prev) => {
+          const all = { ...prev };
+          const filtered = all[date]?.filter((m) => m.id !== meeting.id) || [];
+          if (!filtered.length) {
+            delete all[date];
+          } else {
+            all[date] = filtered;
           }
-          return {
-            ...AllMeeting,
-            [date]: filteredMeeting,
-          };
+          return all;
         });
+
+        toast.success('Meeting canceled', { id: toastId });
       })
       .catch((error) => {
-        toast.error(error.message);
+        console.error(error);
+        toast.error(error?.response?.data?.message || error.message || 'Failed to cancel meeting', {
+          id: toastId,
+        });
       });
   };
 
