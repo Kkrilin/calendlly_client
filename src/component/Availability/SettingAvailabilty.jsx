@@ -2,7 +2,7 @@ import { weekDays } from '../../utils';
 import { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
 import Loader from '../Loader/CircularLoader.jsx';
-import { availabilityBaseUrl, header } from '../../api';
+import { availabilityBaseUrl, getHeader } from '../../api';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
@@ -10,10 +10,12 @@ import WeekDaysForSettings from './WeekDaysForSettings.jsx';
 
 const SettingAvailabilty = () => {
   const [availabilities, setAvailabilities] = useState([]);
+  const [isAvailabilityExit, setIsAvailabilityExist] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [availabilityError, setAvailablityError] = useState(false);
-
+  const token = localStorage.getItem('token');
+  const header = getHeader(token);
   const handleSubmit = () => {
     if (availabilityError) {
       toast.error('availabilty is not correct');
@@ -40,6 +42,7 @@ const SettingAvailabilty = () => {
       .then((res) => {
         if (res.data.availability.length) {
           navigate('/user/event-type', { replace: true });
+          setIsAvailabilityExist(true);
           setLoading(false);
         }
       })
@@ -56,41 +59,45 @@ const SettingAvailabilty = () => {
   }
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <div style={{ width: '30vw' }}>
-        <h1>meeting Availability</h1>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'start',
-            justifyContent: 'space-between',
-            flexDirection: 'column',
-            gap: '20px',
-            marginTop: '2rem',
-            paddingBottom: '2rem',
-            borderTop: '1px solid #e7f1ff',
-          }}
-        >
-          <div className="availability_container">
-            <p style={{ color: 'blue' }}>
-              set your availability for us to get started latter you can change it
-            </p>
-            <h3>Weekly hours</h3>
-            <div className="weekly_hour_container">
-              {weekDays.map((week) => (
-                <WeekDaysForSettings
-                  key={week}
-                  week={week}
-                  setAvailabilities={setAvailabilities}
-                  setAvailablityError={setAvailablityError}
-                />
-              ))}
+    <>
+      {!isAvailabilityExit && (
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div style={{ width: '30vw' }}>
+            <h1>meeting Availability</h1>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'start',
+                justifyContent: 'space-between',
+                flexDirection: 'column',
+                gap: '20px',
+                marginTop: '2rem',
+                paddingBottom: '2rem',
+                borderTop: '1px solid #e7f1ff',
+              }}
+            >
+              <div className="availability_container">
+                <p style={{ color: 'blue' }}>
+                  set your availability for us to get started latter you can change it
+                </p>
+                <h3>Weekly hours</h3>
+                <div className="weekly_hour_container">
+                  {weekDays.map((week) => (
+                    <WeekDaysForSettings
+                      key={week}
+                      week={week}
+                      setAvailabilities={setAvailabilities}
+                      setAvailablityError={setAvailablityError}
+                    />
+                  ))}
+                </div>
+                <Button onClick={handleSubmit}>Submit</Button>
+              </div>
             </div>
-            <Button onClick={handleSubmit}>Submit</Button>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

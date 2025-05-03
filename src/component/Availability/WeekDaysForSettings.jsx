@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import StartAndEndTime from './StartAndEndTime';
 
 const WeekDaysForSettings = ({ week, setAvailabilities, setAvailablityError }) => {

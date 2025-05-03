@@ -10,19 +10,24 @@ import toast from 'react-hot-toast';
 
 function ProfileLayout() {
   const [loading, setLoading] = useState(true);
+  const [isAvailabilityExit, setIsAvailabilityExist] = useState(false);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   header.headers.Authorization = `Bearer ${token}`;
+  console.log(header, 'profileLaylout');
   useEffect(() => {
     axios
       .get(availabilityBaseUrl, header)
       .then((res) => {
         if (!res.data.availability.length) {
           navigate('/setting/availabilty');
+        } else {
+          setIsAvailabilityExist(true);
         }
       })
       .catch((error) => {
-        toast.error(error.response?.data?.message);
+        console.log('111111111111111');
+        toast.error(error.response.data.message);
       })
       .finally(() => {
         setLoading(false);
@@ -34,21 +39,25 @@ function ProfileLayout() {
   }
 
   return (
-    <div style={{ display: 'flex', overflow: 'hidden' }}>
-      <LeftSideBar />
-      <div
-        style={{
-          width: '86vw',
-          padding: '2rem 12rem',
-          overflowY: 'auto',
-          height: '100vh',
-          backgroundColor: '#FAFAFA',
-        }}
-      >
-        <ProfileHeader />
-        <Outlet />
-      </div>
-    </div>
+    <>
+      {isAvailabilityExit && (
+        <div style={{ display: 'flex', overflow: 'hidden' }}>
+          <LeftSideBar />
+          <div
+            style={{
+              width: '86vw',
+              padding: '2rem 12rem',
+              overflowY: 'auto',
+              height: '100vh',
+              backgroundColor: '#FAFAFA',
+            }}
+          >
+            <ProfileHeader />
+            <Outlet />
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
