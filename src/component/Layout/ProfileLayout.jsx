@@ -13,15 +13,12 @@ function ProfileLayout() {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   header.headers.Authorization = `Bearer ${token}`;
-  console.log(header, 'profileLaylout');
   useEffect(() => {
     axios
       .get(availabilityBaseUrl, header)
       .then((res) => {
         if (!res.data.availability.length) {
           navigate('/setting/availabilty');
-        } else {
-          setIsAvailabilityExist(true);
         }
       })
       .catch((error) => {
